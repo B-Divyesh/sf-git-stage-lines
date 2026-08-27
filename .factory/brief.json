@@ -1,0 +1,8 @@
+{
+  "slug": "git-stage-lines",
+  "title": "Non-interactive, line-range staging for git (and for coding agents)",
+  "artifact_class": "cli",
+  "smallest_useful_product": "git stage-lines path/to/file.ts:12-18,40 other.py:3 computes the working-tree vs index diff, selects exact changed lines, and updates the index non-interactively; deletions use old-side line numbers prefixed by a minus; --unstage, --dry-run, and agent wrappers are included.",
+  "monetization": "free",
+  "constraints": "Positive ranges use new-side line numbers; minus-prefixed ranges use old-side line numbers. Text files and CRLF normalization are supported; binary files are rejected without changing the index."
+}
