@@ -1,0 +1,20 @@
+{
+  "name": "git-stage-lines-product",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite site",
+    "build:site": "vite build site --outDir ../dist/site",
+    "build:cli": "cargo build --release",
+    "build": "npm run build:cli && npm run build:site",
+    "preview": "vite preview site --outDir ../dist/site --host 127.0.0.1 --port 4173",
+    "test": "cargo test && npm run build:site && playwright test",
+    "test:site": "playwright test"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.10.2",
+    "@playwright/test": "1.58.2",
+    "vite": "7.3.6"
+  }
+}

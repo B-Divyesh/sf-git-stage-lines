@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="git-stage-lines mark">
+  <rect width="64" height="64" rx="20" fill="#f3f5f2"/>
+  <path d="M14 21h36M14 32h23M14 43h36" fill="none" stroke="#174956" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="43" cy="32" r="6" fill="#296779"/>
+</svg>

@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f3f5f2" />
+    <meta name="description" content="Stage exact Git line ranges from one non-interactive command. Built for developers, scripts, and coding agents." />
+    <title>git-stage-lines — stage exact lines, non-interactively</title>
+    <link rel="icon" href="/mark.svg" type="image/svg+xml" />
+    <script type="module" src="/src/main.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <a class="wordmark" href="/" aria-label="git-stage-lines home"><span class="mark" aria-hidden="true">12—18</span><span>git-stage-lines</span></a>
+      <nav aria-label="Primary navigation">
+        <a href="#grammar">Grammar</a>
+        <a href="#install">Install</a>
+        <a class="nav-github" href="https://github.com/B-Divyesh/sf-git-stage-lines">GitHub <span aria-hidden="true">↗</span></a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy reveal">
+          <p class="eyebrow"><span aria-hidden="true">◆</span> Git’s missing scriptable primitive</p>
+          <h1 id="hero-title">Stage the lines.<br /><em>Only</em> the lines.</h1>
+          <p class="lede">Put exactly lines 12–18 and 40 in the index. No patch prompts, no hand-built diffs, no terminal choreography.</p>
+          <div class="command" role="group" aria-label="Install command">
+            <code>cargo install git-stage-lines</code>
+            <button class="copy-button" type="button" data-copy="cargo install git-stage-lines" aria-label="Copy install command">Copy</button>
+          </div>
+          <div class="hero-links">
+            <a class="primary-link" href="#install">Install the CLI <span aria-hidden="true">↓</span></a>
+            <a href="#grammar">Try the grammar</a>
+          </div>
+        </div>
+        <figure class="hero-art reveal">
+          <picture>
+            <source media="(max-width: 700px)" srcset="/assets/hero-768.webp" />
+            <img src="/assets/hero.webp" width="1536" height="1024" alt="Three thin porcelain slabs separated by a blue glass seam, representing working tree, selected lines, and Git index layers" fetchpriority="high" />
+          </picture>
+          <figcaption><span>working tree</span><span class="selected-label">selected range</span><span>index</span></figcaption>
+        </figure>
+      </section>
+
+      <div class="assurance" aria-label="Product properties">
+        <span>One atomic patch</span><span>Zero prompts</span><span>Zero telemetry</span><span>MIT licensed</span>
+      </div>
+
+      <section class="range-lab section" id="grammar" aria-labelledby="grammar-title">
+        <div class="section-intro">
+          <p class="eyebrow">Range lab / local only</p>
+          <h2 id="grammar-title">A tiny grammar with exact edges.</h2>
+          <p>Positive numbers address working-tree lines. Prefix deletions with <code>-</code> to address their old index line numbers.</p>
+        </div>
+        <div class="lab-layout">
+          <form class="lab-controls" id="range-form" novalidate>
+            <label for="file-path">Repository path</label>
+            <input id="file-path" name="file-path" value="src/app.ts" spellcheck="false" autocomplete="off" />
+            <label for="ranges">Changed lines to stage</label>
+            <input id="ranges" name="ranges" value="3-4,7" spellcheck="false" autocomplete="off" aria-describedby="range-hint range-error" />
+            <p class="hint" id="range-hint">Try <code>3-4,7</code> or a deletion such as <code>-2</code>.</p>
+            <p class="form-error" id="range-error" role="alert" aria-live="polite"></p>
+            <div class="assembled" aria-live="polite">
+              <span>Your command</span>
+              <code id="assembled-command">git stage-lines src/app.ts:3-4,7</code>
+            </div>
+            <button class="copy-button lab-copy" type="button" data-copy-target="assembled-command">Copy command</button>
+          </form>
+          <div class="diff-sheet" aria-label="Example diff preview">
+            <div class="sheet-top"><span>working tree</span><span>selected lines are glazed blue</span></div>
+            <ol class="code-lines" id="code-lines">
+              <li><span>1</span><code>export function stage(spec) {</code></li>
+              <li class="deleted"><span>2</span><code>− &nbsp;prompt(spec);</code></li>
+              <li class="changed"><span>3</span><code>+ &nbsp;const patch = build(spec);</code></li>
+              <li class="changed"><span>4</span><code>+ &nbsp;validate(patch);</code></li>
+              <li><span>5</span><code>&nbsp;&nbsp;&nbsp;apply(patch);</code></li>
+              <li><span>6</span><code>}</code></li>
+              <li class="changed"><span>7</span><code>+ export { stage };</code></li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <section class="section mechanics" aria-labelledby="mechanics-title">
+        <div class="section-intro">
+          <p class="eyebrow">Under the glaze</p>
+          <h2 id="mechanics-title">Git stays in charge.</h2>
+          <p>The CLI uses the repository’s own filters and patch engine. Your working copy is never rewritten.</p>
+        </div>
+        <ol class="steps">
+          <li><span class="step-number">01</span><div><h3>Read both sides</h3><p>Compare the current index to Git’s filtered working-tree blob.</p></div><code>index → worktree</code></li>
+          <li><span class="step-number">02</span><div><h3>Cut on line boundaries</h3><p>Keep only the requested changed lines and their paired replacements.</p></div><code>12—18 · 40</code></li>
+          <li><span class="step-number">03</span><div><h3>Validate, then apply</h3><p>Check one combined patch before atomically updating the index.</p></div><code>git apply --cached</code></li>
+        </ol>
+      </section>
+
+      <section class="section semantics" aria-labelledby="semantics-title">
+        <div class="section-intro">
+          <p class="eyebrow">No hidden semantics</p>
+          <h2 id="semantics-title">Each number names one side.</h2>
+        </div>
+        <div class="table-wrap" tabindex="0" aria-label="Scrollable line-number semantics table">
+          <table>
+            <caption>Line numbering in stage and unstage modes</caption>
+            <thead><tr><th scope="col">Token</th><th scope="col">Stage</th><th scope="col">Unstage</th></tr></thead>
+            <tbody>
+              <tr><th scope="row"><code>12-18</code></th><td>Working-tree lines</td><td>Current index lines</td></tr>
+              <tr><th scope="row"><code>-20--24</code></th><td>Deleted index lines</td><td>Deleted <code>HEAD</code> lines</td></tr>
+              <tr><th scope="row">Replacement</th><td colspan="2">Either side selects the paired whole-line change</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="callout"><strong>Safety edge:</strong> if any number is unchanged, out of range, binary, or conflicted, nothing is applied.</p>
+      </section>
+
+      <section class="section install" id="install" aria-labelledby="install-title">
+        <div class="section-intro">
+          <p class="eyebrow">Install / v0.1.0</p>
+          <h2 id="install-title">One binary. Then it speaks Git.</h2>
+          <p>Git automatically exposes an executable named <code>git-stage-lines</code> as <code>git stage-lines</code>.</p>
+        </div>
+        <div class="install-grid">
+          <div class="install-main">
+            <h3>From Cargo</h3>
+            <div class="command"><code>cargo install git-stage-lines</code><button class="copy-button" type="button" data-copy="cargo install git-stage-lines" aria-label="Copy Cargo install command">Copy</button></div>
+            <h3>From source</h3>
+            <div class="command"><code>cargo install --git https://github.com/B-Divyesh/sf-git-stage-lines</code><button class="copy-button" type="button" data-copy="cargo install --git https://github.com/B-Divyesh/sf-git-stage-lines" aria-label="Copy source install command">Copy</button></div>
+          </div>
+          <aside class="requirements" aria-label="Requirements">
+            <p class="eyebrow">Requires</p>
+            <dl><div><dt>Git</dt><dd>2.30+</dd></div><div><dt>Runtime</dt><dd>None</dd></div><div><dt>Network</dt><dd>Never</dd></div><div><dt>License</dt><dd>MIT</dd></div></dl>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section agents" aria-labelledby="agents-title">
+        <div class="section-intro">
+          <p class="eyebrow">Built for agents, too</p>
+          <h2 id="agents-title">A stable answer for tool calls.</h2>
+          <p>Use <code>--json</code> directly or the included typed wrappers. No shell and no prompt parsing.</p>
+        </div>
+        <div class="agent-code">
+          <div><span>Command</span><pre tabindex="0"><code>git stage-lines --json src/app.ts:12-18</code></pre></div>
+          <div><span>Result</span><pre tabindex="0"><code>{
+  "ok": true,
+  "mode": "stage",
+  "files": ["src/app.ts"],
+  "changedLines": 7
+}</code></pre></div>
+        </div>
+      </section>
+
+      <section class="final-cta" aria-labelledby="cta-title">
+        <p class="eyebrow">Stop editing patches by hand</p>
+        <h2 id="cta-title">Make the index exact.</h2>
+        <a class="primary-link" href="https://github.com/B-Divyesh/sf-git-stage-lines">View source on GitHub <span aria-hidden="true">↗</span></a>
+      </section>
+    </main>
+
+    <footer>
+      <a class="wordmark" href="/"><span class="mark" aria-hidden="true">12—18</span><span>git-stage-lines</span></a>
+      <p>Small, sharp software from <a href="https://sociobot.in">Sociobot</a>.</p>
+      <div><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://github.com/B-Divyesh/sf-git-stage-lines/blob/main/LICENSE">MIT license</a></div>
+    </footer>
+    <div class="offline-note" id="offline-note" role="status" hidden>You’re offline. The docs and range lab still work locally.</div>
+  </body>
+</html>

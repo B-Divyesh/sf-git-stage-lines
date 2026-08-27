@@ -52,5 +52,28 @@ then converted locally to WebP at no more than 1600px and 300KB. Prompt and
 generator details are recorded here after generation. No third-party stock,
 icons, fonts, or scripts are used.
 
+Generation provenance: created 2026-08-27 with `/opt/fleet/lib/gen-image.sh`,
+deployment `factory-image`, 1536×1024, high quality. The complete prompt was:
+
+> Use case: stylized-concept. Asset type: wide landing-page hero for a precise
+> Git CLI. Scene/backdrop: quiet cool-white studio, faint mineral frost surface,
+> generous pale negative space on the left. Subject: three very thin handmade
+> porcelain slabs hovering in exact alignment on the right, like layers of a
+> Git index and working tree; one narrow translucent glacial-blue seam separates
+> selected line ranges; each slab has a few tiny abstract incised horizontal
+> marks, never readable text. Style/medium: premium editorial product
+> photography, glacial minimal ceramics, restrained and tactile, original art.
+> Composition/framing: 3:2 wide, low three-quarter macro angle, main forms on
+> right two-thirds, uncluttered left third. Lighting/mood: diffuse polar
+> daylight, soft shadows, calm precision. Color palette: snow #f3f5f2,
+> porcelain #fbfcf8, blue-black #172421, glacial blue #296779, tiny moss and
+> oxide line accents. Materials/textures: matte porcelain, slightly irregular
+> hand-cut edges, translucent icy glass seam. Constraints: no people, no hands,
+> no logos, no readable text, no terminal window, no UI mockup, no symbols, no
+> watermark, no gradient background.
+
+The PNG source and machine-readable generation record live in
+`.factory/assets/`; shipped 1536px and 768px WebP encodes are 40KB and 13KB.
+The output is project-original and used under the repository’s MIT license.
 The small snowflake/line-range mark is hand-made in CSS from rules and text;
 it is not a borrowed icon.
