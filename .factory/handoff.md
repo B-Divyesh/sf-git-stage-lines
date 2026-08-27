@@ -50,8 +50,9 @@ fails without touching the index.
 - Production payload: initial JS 2.78KB (1.29KB gzip), CSS 12.21KB (3.74KB
   gzip), hero 40KB desktop / 13KB mobile, no webfont payload.
 - `npm audit --omit=dev`: 0 vulnerabilities.
-- `npm run build`: pass; produces `target/release/git-stage-lines` (783KB) and
-  `dist/site/index.html` at the required static deploy root.
+- `npm run build`: pass both in-place and from a clean `git archive`; produces
+  `target/release/git-stage-lines` (783KB) and `dist/site/index.html` at the
+  required static deploy root.
 - Package checks: Cargo crate packaged and recompiled (69KB); Node `npm pack
   --dry-run` passed (1.2KB); Python sdist and universal wheel built (2.4KB
   each). No registry publication was attempted.
