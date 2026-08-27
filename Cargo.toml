@@ -1,0 +1,31 @@
+[package]
+name = "git-stage-lines"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.80"
+description = "Non-interactive, exact line-range staging for Git"
+license = "MIT"
+repository = "https://github.com/B-Divyesh/sf-git-stage-lines"
+readme = "README.md"
+keywords = ["git", "staging", "cli", "automation", "agents"]
+categories = ["command-line-utilities", "development-tools"]
+include = ["src/**", "tests/**", "Cargo.toml", "README.md", "LICENSE", "CHANGELOG.md"]
+
+[[bin]]
+name = "git-stage-lines"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4.5", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+similar = "2.7"
+
+[dev-dependencies]
+tempfile = "3.21"
+
+[profile.release]
+strip = true
+lto = true
+codegen-units = 1
+panic = "abort"
