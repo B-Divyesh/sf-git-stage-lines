@@ -12,8 +12,7 @@ license = "MIT"
 authors = [{ name = "Sociobot Param Factory" }]
 classifiers = [
   "Programming Language :: Python :: 3",
-  "Typing :: Typed",
-  "License :: OSI Approved :: MIT License"
+  "Typing :: Typed"
 ]
 
 [tool.setuptools]
