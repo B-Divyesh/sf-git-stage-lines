@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Typed Python wrapper for the git-stage-lines executable"
 readme = "README.md"
 requires-python = ">=3.9"
-license = { text = "MIT" }
+license = "MIT"
 authors = [{ name = "Sociobot Param Factory" }]
 classifiers = [
   "Programming Language :: Python :: 3",

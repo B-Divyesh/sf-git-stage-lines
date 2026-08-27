@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import subprocess
 from pathlib import Path
-from typing import List, Literal, Optional, Sequence, TypedDict
+from typing import List, Literal, Optional, Sequence, TypedDict, Union
 
 
 class StageLinesResult(TypedDict):
@@ -20,7 +20,7 @@ class StageLinesResult(TypedDict):
 def stage_lines(
     selectors: Sequence[str],
     *,
-    cwd: Optional[Path | str] = None,
+    cwd: Optional[Union[Path, str]] = None,
     dry_run: bool = False,
     unstage: bool = False,
     executable: str = "git-stage-lines",

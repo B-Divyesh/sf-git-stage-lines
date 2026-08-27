@@ -9,7 +9,7 @@
     "build:cli": "cargo build --release",
     "build": "npm run build:cli && npm run build:site",
     "preview": "vite preview site --outDir ../dist/site --host 127.0.0.1 --port 4173",
-    "test": "cargo test && npm run build:site && playwright test",
+    "test": "cargo test && node --test wrappers/node/test.js && PYTHONPATH=wrappers/python python3 -m unittest discover -s wrappers/python/tests && npm run build:site && playwright test",
     "test:site": "playwright test"
   },
   "devDependencies": {

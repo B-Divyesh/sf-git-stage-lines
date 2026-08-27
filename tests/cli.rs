@@ -166,3 +166,41 @@ fn rejects_binary_and_keeps_index_atomic_on_bad_selector() {
     assert_eq!(invalid.status.code(), Some(2));
     assert_eq!(index_text(repo.path(), "safe.txt"), "one\n");
 }
+
+#[test]
+fn stages_new_and_deleted_files_and_restores_staged_deletion() {
+    let repo = init();
+    commit_file(repo.path(), "gone.txt", b"one\ntwo\n");
+    fs::remove_file(repo.path().join("gone.txt")).unwrap();
+
+    let deleted = cli(repo.path(), &["gone.txt:-1--2"]);
+    assert!(
+        deleted.status.success(),
+        "{}",
+        String::from_utf8_lossy(&deleted.stderr)
+    );
+    let missing = Command::new("git")
+        .arg("-C")
+        .arg(repo.path())
+        .args(["cat-file", "-e", ":gone.txt"])
+        .output()
+        .unwrap();
+    assert!(!missing.status.success());
+
+    let restored = cli(repo.path(), &["--unstage", "gone.txt:-1--2"]);
+    assert!(
+        restored.status.success(),
+        "{}",
+        String::from_utf8_lossy(&restored.stderr)
+    );
+    assert_eq!(index_text(repo.path(), "gone.txt"), "one\ntwo\n");
+
+    fs::write(repo.path().join("new.txt"), b"first\nsecond\n").unwrap();
+    let added = cli(repo.path(), &["new.txt:2"]);
+    assert!(
+        added.status.success(),
+        "{}",
+        String::from_utf8_lossy(&added.stderr)
+    );
+    assert_eq!(index_text(repo.path(), "new.txt"), "second\n");
+}

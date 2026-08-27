@@ -1,3 +1,16 @@
+//! Library engine for the `git-stage-lines` Git subcommand.
+//!
+//! The public parser and selector use the same range semantics as the CLI:
+//!
+//! ```
+//! use git_stage_lines::{parse_range_list, select_text};
+//!
+//! let ranges = parse_range_list("2").unwrap();
+//! let (selected, count) = select_text("one\nthree\n", "one\ntwo\nthree\n", &ranges, true).unwrap();
+//! assert_eq!(selected, "one\ntwo\nthree\n");
+//! assert_eq!(count, 1);
+//! ```
+
 use serde::Serialize;
 use similar::{DiffTag, TextDiff};
 use std::collections::{BTreeMap, HashSet};
@@ -307,15 +320,11 @@ pub fn run(
                 .map_err(|error| CliError::usage(format!("{path}: {}", error.message)))?;
         changed_lines += file_changed_lines;
 
-        let target_matches_source = target_content
-            == if target_source_exists {
-                &new.content
-            } else {
-                ""
-            };
-        let target_exists = !(target_matches_source && !target_source_exists);
+        let target_exists = !target_content.is_empty() || target_source_exists;
         let target_mode = if target_exists {
-            if unstage && old.exists {
+            if base.exists {
+                base.mode.as_str()
+            } else if unstage && old.exists {
                 old.mode.as_str()
             } else if new.exists {
                 new.mode.as_str()
@@ -677,5 +686,44 @@ mod tests {
     fn rejects_unchanged_line() {
         let selection = parse_range_list("1").unwrap();
         assert!(select_text("same\n", "same\nnew\n", &selection, true).is_err());
+    }
+
+    #[test]
+    fn two_hundred_case_fixture_matrix() {
+        for case in 0..200 {
+            let ending = if case % 4 == 0 { "\r\n" } else { "\n" };
+            let lines: Vec<String> = (1..=20)
+                .map(|line| format!("line-{line:02}{ending}"))
+                .collect();
+            let old = lines.concat();
+            let position = case % 18 + 2;
+            let (new, selector, expected) = match case % 3 {
+                0 => {
+                    let mut changed = lines.clone();
+                    changed.insert(position - 1, format!("insert-{case}{ending}"));
+                    let mut selected = lines.clone();
+                    selected.insert(position - 1, format!("insert-{case}{ending}"));
+                    (changed.concat(), position.to_string(), selected.concat())
+                }
+                1 => {
+                    let mut changed = lines.clone();
+                    changed.remove(position - 1);
+                    let expected = changed.concat();
+                    (expected.clone(), format!("-{position}"), expected)
+                }
+                _ => {
+                    let mut changed = lines.clone();
+                    changed[position - 1] = format!("replace-{case}{ending}");
+                    let expected = changed.concat();
+                    (expected.clone(), position.to_string(), expected)
+                }
+            };
+            let selection = parse_range_list(&selector).unwrap();
+            assert_eq!(
+                select_text(&old, &new, &selection, true).unwrap().0,
+                expected,
+                "fixture {case}"
+            );
+        }
     }
 }
