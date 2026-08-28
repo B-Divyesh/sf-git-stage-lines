@@ -1,91 +1,74 @@
 # git-stage-lines
 
-Stage exact changed lines from a script, one command, or a coding agent—without
-driving `git add -p`.
+Stage selected Git lines from scripts and coding agents without an interactive
+patch prompt.
 
 ```sh
 git stage-lines src/app.ts:12-18,40 tests/app.test.ts:7
 ```
 
-`git-stage-lines` is a non-interactive Git subcommand for developers and
-automation that need a precise index. It computes the text diff, builds one
-minimal patch, validates it with Git, and applies it to the index atomically.
-It never changes the working tree, commits, calls a network service, or emits
-an interactive prompt.
+The command changes the Git index and leaves the working file unchanged. It is
+free under the MIT License and contains no network calls.
+
+## Try the isolated sample
+
+```sh
+cargo run -- --demo
+```
+
+Every run creates a new repository under the system temporary directory. It
+copies the files in [`examples`](examples), stages lines 5 and 10, and leaves
+one sample change unstaged. The command prints the repository path for review.
+
+The matching browser recording is at
+<https://git-stage-lines.sociobot.in/?demo=1>. **Reset demo** restores the
+recording. The page uses no cookies, local storage, or session storage.
 
 ## Install
 
-Requires Git 2.30 or newer. Prebuilt release archives are intended for normal
-installation. To install from source with Rust 1.80+:
+Install from source with Cargo:
 
 ```sh
 cargo install --path .
 git stage-lines --version
 ```
 
-Git discovers any `git-stage-lines` executable on `PATH` as `git stage-lines`.
+Git discovers the `git-stage-lines` executable as `git stage-lines`.
 
-## Usage
+## Use line ranges
 
 ```text
 git stage-lines [OPTIONS] <FILE:RANGES>...
 
-Arguments:
-  <FILE:RANGES>...  A path and comma-separated ranges, for example
-                    src/app.ts:12-18,40,-9
-
 Options:
-      --unstage     Remove only these lines from the index (compare HEAD → index)
+      --demo        Run bundled sample data in a new temporary repository
+      --unstage     Remove selected lines from the index
       --dry-run     Print the patch without changing the index
-      --json        Emit one stable JSON result object to stdout
-  -C, --repo <DIR>  Run as if started in this repository
-  -h, --help        Print help
-  -V, --version     Print version
+      --json        Write one JSON result object to stdout
+  -C, --repo <DIR>  Run in this repository
 ```
 
-Positive numbers select changed lines on the **new side** of the comparison.
-Prefix a number or range with `-` to select a deletion by its **old-side** line
-number:
+Positive numbers select changed lines in the working file. Prefix a range with
+`-` to select deleted original lines.
 
 ```sh
-# Stage working-tree lines 12–18 and 40, plus index deletion line 9.
 git stage-lines src/app.ts:12-18,40,-9
-
-# Deletion range: old-side lines 20 through 24.
 git stage-lines src/app.ts:-20--24
-
-# Preview the exact patch; the index is untouched.
 git stage-lines --dry-run src/app.ts:12,40
-
-# Unstage index lines 12–18 and a deletion originally at HEAD line 9.
 git stage-lines --unstage src/app.ts:12-18,-9
-
-# Machine-readable status for an agent.
 git stage-lines --json src/app.ts:12
 ```
 
-In normal staging mode, the old side is the current index and the new side is
-the filtered working-tree file. In `--unstage` mode, the old side is `HEAD` and
-the new side is the current index. A changed replacement is indivisible at the
-line level: selecting either its old or new line stages/unstages that paired
-whole-line replacement. Adjacent pure additions and deletions remain
-individually selectable. Every requested number must name a changed line;
-otherwise the command fails before modifying the index.
+Selecting either side of a replacement selects the paired replacement. An
+invalid line rejects the command before the index changes. Git clean filters
+determine text contents. Binary data is rejected without changing the index.
 
-CRLF files are compared after Git's configured clean filters, so line numbers
-match Git's own diff. Binary and non-UTF-8 blobs are rejected with a useful
-error and no partial update. Paths are repository-relative and may contain
-spaces; `..`, absolute paths, unresolved conflicts, and submodules are rejected.
+Success exits `0`. Bad arguments or unmatched lines exit `2`. Other file or
+Git failures exit `1`.
 
-Exit codes are `0` for success (including a valid no-op), `2` for invalid
-arguments or unmatched lines, and `1` for repository/Git/apply failures. With
-`--json`, stdout is a single object containing `ok`, `mode`, `dryRun`, `files`,
-`changedLines`, and `patch`; diagnostics go to stderr.
+## Use typed wrappers
 
-## Agent wrappers
-
-Thin typed wrappers invoke the same executable, so agent harnesses do not need
-to parse shell quoting:
+The repository includes small Node and Python wrappers:
 
 ```ts
 import { stageLines } from "@git-stage-lines/node";
@@ -97,29 +80,30 @@ from git_stage_lines import stage_lines
 result = stage_lines(["src/app.py:12-18,40"], dry_run=True)
 ```
 
-See [`wrappers/node`](wrappers/node) and [`wrappers/python`](wrappers/python).
-Both require `git-stage-lines` on `PATH` and request the stable JSON output.
+See [`wrappers/node`](wrappers/node) and
+[`wrappers/python`](wrappers/python).
 
 ## Develop and verify
 
 ```sh
-npm install
-npm test                 # Rust unit/integration tests + site checks
-npm run build            # release binary + static site in dist/site/
-cargo test
+npm ci
+npm test
+npm run build          # release binary and dist/site
+npm run test:claims    # every registered product claim
+cargo fmt --check
+cargo clippy --all-targets -- -D warnings
 cargo package --allow-dirty
-npm run dev              # local documentation site
+npm pack --dry-run ./wrappers/node
 ```
 
-The zero-telemetry landing page at
-<https://git-stage-lines.sociobot.in> documents the same grammar and includes a
-local-only range visualizer. It has no runtime CDN requests or user storage.
+The static site is built with `npm run build:site` and deployed from
+`dist/site`. See [`.factory/claims.json`](.factory/claims.json) for claim-level
+commands and [`.factory/demo.md`](.factory/demo.md) for isolation details.
 
-## Design limits
+## Scope
 
-Version 0.1.0 operates on text files in the regular worktree/index/HEAD flow.
-It intentionally does not rewrite history, split commits, stage binary data,
-resolve merge conflicts, or provide an interactive UI.
+Version 0.1.0 supports regular text files in the worktree, index, and `HEAD`
+flow. It does not rewrite history, create commits, or stage binary data.
 
 ## License
 

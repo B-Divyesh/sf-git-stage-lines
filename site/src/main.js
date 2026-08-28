@@ -1,5 +1,10 @@
 import "./styles.css";
 
+const query = new URLSearchParams(location.search);
+if (document.body.dataset.page === "home" && query.get("demo") === "1") {
+  location.replace("/demo/");
+}
+
 const copyButtons = document.querySelectorAll("[data-copy], [data-copy-target]");
 const liveMessage = document.createElement("div");
 liveMessage.className = "sr-only";
@@ -65,6 +70,36 @@ if (pathInput && rangeInput && commandOutput && rangeError) {
   rangeInput.addEventListener("input", updateLab);
   updateLab();
 }
+
+const resetDemo = document.querySelector("[data-demo-reset]");
+const demoOutput = document.querySelector("#demo-output");
+if (resetDemo && demoOutput) {
+  const original = demoOutput.innerHTML;
+  resetDemo.addEventListener("click", () => {
+    demoOutput.innerHTML = original;
+    demoOutput.focus();
+    liveMessage.textContent = "Demo reset with a fresh sample repository.";
+  });
+}
+
+const routeStatus = document.querySelector("#route-status");
+const routeHeading = document.querySelector("h1");
+const arrivedFromThisSite = document.referrer && new URL(document.referrer).origin === location.origin;
+const navigationType = performance.getEntriesByType("navigation")[0]?.type;
+if ((arrivedFromThisSite || navigationType === "back_forward") && routeHeading) {
+  routeHeading.tabIndex = -1;
+  routeHeading.focus({ preventScroll: true });
+  if (routeStatus) routeStatus.textContent = routeHeading.textContent;
+}
+window.addEventListener("pageshow", (event) => {
+  if (event.persisted && routeHeading) {
+    setTimeout(() => {
+      routeHeading.tabIndex = -1;
+      routeHeading.focus({ preventScroll: true });
+      if (routeStatus) routeStatus.textContent = routeHeading.textContent;
+    });
+  }
+});
 
 const offlineNote = document.querySelector("#offline-note");
 function updateNetworkState() {

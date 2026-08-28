@@ -77,3 +77,16 @@ The PNG source and machine-readable generation record live in
 The output is project-original and used under the repository’s MIT license.
 The small snowflake/line-range mark is hand-made in CSS from rules and text;
 it is not a borrowed icon.
+
+## Repair-round extensions
+
+The demo keeps the same ceramic system and adds a night-ice terminal slab. Its
+green staged lines and oxide remaining line mirror the index layers in the
+hero rather than introducing a dashboard style. On phones, the hero becomes a
+single task column, facts stack, the artwork follows the action, tables scroll,
+and terminal output wraps. The demo banner stops being sticky below 600px so it
+cannot hide content or fight the device safe area.
+
+The 1200×630 social image and 180px touch icon were derived locally from the
+original generated hero art on 2026-08-28 with ImageMagick. No new third-party
+art, type, icons, or scripts were introduced.

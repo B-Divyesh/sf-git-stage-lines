@@ -9,7 +9,7 @@ repository = "https://github.com/B-Divyesh/sf-git-stage-lines"
 readme = "README.md"
 keywords = ["git", "staging", "cli", "automation", "agents"]
 categories = ["command-line-utilities", "development-tools"]
-include = ["src/**", "tests/**", "Cargo.toml", "README.md", "LICENSE", "CHANGELOG.md"]
+include = ["src/**", "tests/**", "examples/**", "Cargo.toml", "README.md", "LICENSE", "CHANGELOG.md"]
 
 [[bin]]
 name = "git-stage-lines"

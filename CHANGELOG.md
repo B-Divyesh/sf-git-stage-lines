@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Add an isolated `--demo` sample repository and matching one-click web demo.
+- Add executable claim tests for staging, safety, privacy, routing, and offline use.
+- Clarify first-screen copy and add complete route metadata, focus, mobile, and 404 handling.
+
 All notable changes follow [Keep a Changelog](https://keepachangelog.com/) and
 this project uses semantic versioning.
 

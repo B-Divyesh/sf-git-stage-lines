@@ -1,5 +1,5 @@
 use clap::Parser;
-use git_stage_lines::run;
+use git_stage_lines::{run, run_demo};
 use std::path::PathBuf;
 
 #[derive(Debug, Parser)]
@@ -11,6 +11,10 @@ use std::path::PathBuf;
     after_help = "Examples:\n  git stage-lines src/app.ts:12-18,40,-9\n  git stage-lines --dry-run 'src/my file.ts:12'\n  git stage-lines --unstage --json src/app.ts:40"
 )]
 struct Args {
+    /// Run an isolated sample repository in a new temporary directory
+    #[arg(long, conflicts_with_all = ["unstage", "dry_run", "json", "repo"])]
+    demo: bool,
+
     /// Remove only these lines from the index (compare HEAD to index)
     #[arg(long)]
     unstage: bool,
@@ -28,12 +32,22 @@ struct Args {
     repo: PathBuf,
 
     /// Path and comma-separated ranges (example: src/app.ts:12-18,40,-9)
-    #[arg(required = true, value_name = "FILE:RANGES")]
+    #[arg(required_unless_present = "demo", value_name = "FILE:RANGES")]
     specs: Vec<String>,
 }
 
 fn main() {
     let args = Args::parse();
+    if args.demo {
+        match run_demo() {
+            Ok(output) => print!("{output}"),
+            Err(error) => {
+                eprintln!("git-stage-lines: {error}");
+                std::process::exit(1);
+            }
+        }
+        return;
+    }
     match run(&args.repo, &args.specs, args.unstage, args.dry_run) {
         Ok(result) => {
             if args.json {

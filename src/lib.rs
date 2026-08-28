@@ -18,6 +18,10 @@ use std::ffi::OsStr;
 use std::fs;
 use std::path::{Component, Path, PathBuf};
 use std::process::{Command, Stdio};
+use std::time::{SystemTime, UNIX_EPOCH};
+
+const DEMO_INITIAL: &str = include_str!("../examples/sprint-board.initial.ts");
+const DEMO_WORKING: &str = include_str!("../examples/sprint-board.working.ts");
 
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub enum Side {
@@ -90,6 +94,59 @@ pub struct RunResult {
     pub files: Vec<String>,
     pub changed_lines: usize,
     pub patch: String,
+}
+
+/// Create and run the bundled sample in a new temporary Git repository.
+///
+/// The directory is intentionally retained so the staged and unstaged states
+/// can be inspected. Running `--demo` again creates a separate repository.
+pub fn run_demo() -> Result<String, CliError> {
+    let stamp = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map_err(|error| CliError::runtime(format!("could not read the clock: {error}")))?
+        .as_nanos();
+    let root = std::env::temp_dir().join(format!(
+        "git-stage-lines-demo-{}-{stamp}",
+        std::process::id()
+    ));
+    fs::create_dir(&root)
+        .map_err(|error| CliError::runtime(format!("could not create demo directory: {error}")))?;
+    demo_git(&root, ["init", "-q"])?;
+    demo_git(&root, ["config", "user.name", "git-stage-lines demo"])?;
+    demo_git(&root, ["config", "user.email", "demo@example.invalid"])?;
+    let sample_path = root.join("sprint-board.ts");
+    fs::write(&sample_path, DEMO_INITIAL)
+        .map_err(|error| CliError::runtime(format!("could not write demo sample: {error}")))?;
+    demo_git(&root, ["add", "sprint-board.ts"])?;
+    demo_git(&root, ["commit", "-qm", "sample sprint board"])?;
+    fs::write(&sample_path, DEMO_WORKING)
+        .map_err(|error| CliError::runtime(format!("could not update demo sample: {error}")))?;
+
+    let result = run(&root, &["sprint-board.ts:5,10".into()], false, false)?;
+    let staged = git(&root, ["diff", "--cached", "--", "sprint-board.ts"], None)?;
+    let unstaged = git(&root, ["diff", "--", "sprint-board.ts"], None)?;
+    Ok(format!(
+        "Demo — sample data in a new temporary repository\n\
+$ git stage-lines sprint-board.ts:5,10\n\
+staged {} selected lines in {} file\n\n\
+Staged diff:\n{}\n\
+Still unstaged:\n{}\n\
+Sample repository: {}\n\
+Run --demo again to reset with a new repository.\n",
+        result.changed_lines,
+        result.files.len(),
+        String::from_utf8_lossy(&staged),
+        String::from_utf8_lossy(&unstaged),
+        root.display()
+    ))
+}
+
+fn demo_git<I, S>(root: &Path, args: I) -> Result<(), CliError>
+where
+    I: IntoIterator<Item = S>,
+    S: AsRef<OsStr>,
+{
+    git(root, args, None).map(|_| ())
 }
 
 #[derive(Clone, Debug)]

@@ -1,0 +1,128 @@
+[
+  {
+    "id": "exact-selection",
+    "claim": "Stages only the selected changed lines without an interactive prompt",
+    "where": "landing first screen, README",
+    "test": "npm run test:claims -- --grep @claim:exact-selection",
+    "sandbox": "fresh temporary Git repository copied from examples; assert exact cached diff and completed process"
+  },
+  {
+    "id": "worktree-unchanged",
+    "claim": "Staging does not rewrite the working file",
+    "where": "landing first screen and how-it-works, README",
+    "test": "npm run test:claims -- --grep @claim:worktree-unchanged",
+    "sandbox": "fresh sample repository; compare working file bytes before and after staging"
+  },
+  {
+    "id": "dry-run",
+    "claim": "Dry run prints the patch without changing the index",
+    "where": "README usage",
+    "test": "npm run test:claims -- --grep @claim:dry-run",
+    "sandbox": "fresh sample repository; compare Git tree IDs before and after --dry-run"
+  },
+  {
+    "id": "unstage",
+    "claim": "Unstage removes only the selected index line",
+    "where": "README usage",
+    "test": "npm run test:claims -- --grep @claim:unstage",
+    "sandbox": "fresh sample repository with two staged lines; assert only one remains staged"
+  },
+  {
+    "id": "reject-atomic",
+    "claim": "An invalid line rejects the full command before the index changes",
+    "where": "landing line reference, README",
+    "test": "npm run test:claims -- --grep @claim:reject-atomic",
+    "sandbox": "fresh sample repository; combine valid and invalid selections and compare Git tree IDs"
+  },
+  {
+    "id": "json-output",
+    "claim": "JSON mode writes one result object to standard output",
+    "where": "landing coding-agent section, README",
+    "test": "npm run test:claims -- --grep @claim:json-output",
+    "sandbox": "fresh sample repository; parse stdout and assert the documented keys and empty stderr"
+  },
+  {
+    "id": "line-number-semantics",
+    "claim": "Positive lines select additions and minus-prefixed original lines select deletions or paired replacements",
+    "where": "landing command builder and reference, README",
+    "test": "npm run test:claims -- --grep @claim:line-number-semantics",
+    "sandbox": "fresh sample repository with an addition, deletion, and replacement; assert final index content"
+  },
+  {
+    "id": "text-safety",
+    "claim": "Uses Git text filters and rejects binary files without changing the index",
+    "where": "landing how-it-works and scope, README",
+    "test": "npm run test:claims -- --grep @claim:text-safety",
+    "sandbox": "fresh repository with CRLF attributes, a spaced path, and binary data; assert normalized index and atomic rejection"
+  },
+  {
+    "id": "git-subcommand",
+    "claim": "Git discovers the executable as git stage-lines",
+    "where": "landing install section, README",
+    "test": "npm run test:claims -- --grep @claim:git-subcommand",
+    "sandbox": "fresh sample repository with target/debug on PATH; invoke through git stage-lines"
+  },
+  {
+    "id": "cli-no-network",
+    "claim": "The CLI makes no network calls",
+    "where": "landing privacy section and facts, privacy page, README",
+    "test": "npm run test:claims -- --grep @claim:cli-no-network",
+    "sandbox": "run --demo with an LD_PRELOAD socket/connect interceptor and assert no socket log is created"
+  },
+  {
+    "id": "demo-isolation",
+    "claim": "Each CLI demo uses a new temporary repository with bundled sample data",
+    "where": "demo page, README, .factory/demo.md",
+    "test": "npm run test:claims -- --grep @claim:demo-isolation",
+    "sandbox": "run --demo twice and assert distinct temporary paths, staged output, and remaining sample change"
+  },
+  {
+    "id": "demo-entry",
+    "claim": "The first-screen sample action opens a resettable demo with nothing saved",
+    "where": "landing first screen and demo banner",
+    "test": "npx playwright test --grep @claim:demo-entry --project=desktop",
+    "sandbox": "fresh browser context; enter from first screen, assert demo route/banner/output, then reset"
+  },
+  {
+    "id": "site-private",
+    "claim": "The site uses only same-origin requests and no cookies, local storage, or session storage",
+    "where": "landing privacy section and privacy page",
+    "test": "npx playwright test --grep @claim:site-private --project=desktop",
+    "sandbox": "fresh browser context with request capture across the full demo flow and storage inspection"
+  },
+  {
+    "id": "offline-reload",
+    "claim": "Visited site pages reload offline",
+    "where": "offline status and privacy page",
+    "test": "npx playwright test --grep @claim:offline-reload --project=desktop",
+    "sandbox": "fresh browser context; visit every route, activate the service worker, switch offline, and reload each route"
+  },
+  {
+    "id": "mit-license",
+    "claim": "The CLI is free under the MIT License",
+    "where": "landing first screen, install section, footer, README",
+    "test": "npm run test:claims -- --grep @claim:mit-license",
+    "sandbox": "assert Cargo package metadata and repository LICENSE contain the MIT grant"
+  },
+  {
+    "id": "exit-codes",
+    "claim": "Success exits 0, bad selections exit 2, and Git or file failures exit 1",
+    "where": "README usage",
+    "test": "npm run test:claims -- --grep @claim:exit-codes",
+    "sandbox": "fresh sample repository; run a success, unmatched line, and binary-file failure and assert each status"
+  },
+  {
+    "id": "scope-boundaries",
+    "claim": "Staging does not create commits or rewrite history",
+    "where": "landing scope section and README",
+    "test": "npm run test:claims -- --grep @claim:scope-boundaries",
+    "sandbox": "fresh sample repository; compare HEAD before and after staging and assert the commit count"
+  },
+  {
+    "id": "typed-wrappers",
+    "claim": "The Node and Python wrappers invoke the executable directly without a shell",
+    "where": "README wrapper examples",
+    "test": "npm run test:claims -- --grep @claim:typed-wrappers",
+    "sandbox": "fresh sample repository; execute the Node wrapper and the Python subprocess contract test"
+  }
+]
