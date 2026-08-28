@@ -1,67 +1,65 @@
-# Review 5 handoff
+# Polish round 5 handoff
 
 ## Delivered
 
-- Completed a cold live review at 390×844 and 1440×1000 before scrolling.
-- Audited every landing and README sentence plus headings, labels, controls,
-  dynamic landing messages, terminology, and claim coverage.
-- Ran all 19 exact `.factory/claims.json` commands separately after only
-  `npm ci` in a fresh clone.
-- Exercised the live browser demo, reset, storage isolation, same-origin
-  network behavior, offline reloads, metadata, routing, Back/focus behavior,
-  links, mobile sizing, and axe checks.
-- Ran the real CLI demo twice from a changed temporary caller repository.
-- Rechecked every finding from Reviews 1–4 against both live output and code.
-- Wrote the evidence and verdict to `.factory/review-5.md`. No product code was
-  modified.
+Repair commit: `ff18b2717312ac7255d78ee34320f8c808107499`.
 
-## Verdict and remaining work
+- Corrected the browser-only demo reset announcement to **“Demo recording
+  reset.”** It no longer claims that a repository was created in the browser.
+- Strengthened `@claim:demo-entry` to assert that exact live-region status,
+  output restoration, and output focus. The dynamic status is included in the
+  copy audit and the claim sandbox now describes the assertion.
+- Removed entrance opacity animation from all readable hero content. Only the
+  decorative ceramic artwork reveals, at the documented 240ms duration. The
+  Back-navigation test now asserts the hero text is fully opaque before it
+  performs axe.
+- Updated the catalog description to a verb-first, 76-character sentence.
+- Preserved the existing recorded browser demo, real `--demo` temporary-repo
+  path, claims register, routed legal pages, designed 404, privacy posture,
+  mobile treatment, and glacial-ceramic visual identity.
 
-**FAIL.** Two blocking findings remain. F-5-1 reopens Review 4 F-4-1. After
-**Reset demo**, the screen-reader live region says “Demo reset with a fresh
-sample repository,” although the browser only restores a static recording.
+## Verification
 
-Change that status to **“Demo recording reset.”**, assert the exact live-region
-message in `@claim:demo-entry`, and add it to `.factory/copy-audit.md`.
+- `npm ci && npm test` passed after the final motion change: 6 Rust unit
+  tests, 7 real-Git integration tests, 1 doctest, Node and Python wrapper
+  tests, all 19 claim tests, and 22 desktop/mobile Playwright tests.
+- Release checks passed: `cargo fmt --check`,
+  `cargo clippy --all-targets -- -D warnings`, `cargo package --allow-dirty`,
+  `npm pack --dry-run ./wrappers/node`, and a Python sdist/wheel build in
+  `/tmp/gsl-polish5-pybuild`.
+- Fresh clone `/tmp/gsl-polish5-clean-4rq13q/repo`: after only `npm ci`, every
+  exact `test` string from all 19 `.factory/claims.json` entries exited 0.
+  This includes the self-building browser demo, privacy, and offline claims.
+- Static deployment succeeded as Azure Static Web Apps deployment
+  `e05b9d4a-e7f1-41ff-8876-655fe398b60d` at
+  <https://git-stage-lines.sociobot.in/>.
+- Cold live audit evidence is in `/tmp/gsl-polish5-live-j7oSUZ/`:
+  [live audit](/tmp/gsl-polish5-live-j7oSUZ/live-audit.json),
+  [desktop home](/tmp/gsl-polish5-live-j7oSUZ/live-home-desktop.png), and
+  [mobile demo](/tmp/gsl-polish5-live-j7oSUZ/live-demo-mobile.png). It
+  confirmed immediate hero opacity `1`, the truthful reset status, same-origin
+  requests, empty user storage, direct `?demo=1`, all route metadata, 404,
+  zero axe violations in both themes, 44px mobile targets, no overflow, and
+  offline reloads for `/`, `/demo/`, `/privacy/`, and `/terms/`.
+- `verify-url.sh` passed for each public route with zero console errors and
+  confirmed title, lang, one H1, main landmark, and image alternatives. Mobile
+  Lighthouse report
+  [lighthouse-retry.json](/tmp/gsl-polish5-live-j7oSUZ/lighthouse-retry.json)
+  scored Performance 99, Accessibility 100, Best Practices 100, and SEO 100;
+  LCP was 1.08s and CLS was 0.
 
-F-5-2 records a reproducible `npm test` failure. The 480ms opacity entrance on
-`.hero-copy` temporarily lowers key first-screen text below 4.5:1 contrast;
-axe measured 3.65:1 in the failing mobile Back-navigation test and as low as
-3.1:1 on an immediate live audit. Keep readable text fully opaque and limit
-entrance motion to decorative content, then rerun the full gate.
-
-## Verification evidence
-
-- Fresh clone: `/tmp/gsl-review5-clean-CG2qKa`; all 19 registered commands
-  exited 0.
-- Cold screenshots and extracted first-screen text:
-  `/tmp/gsl-review5-live-1KR0PC/first-mobile.png`,
-  `/tmp/gsl-review5-live-1KR0PC/first-desktop.png`, and
-  `/tmp/gsl-review5-live-1KR0PC/first-read.json`.
-- Live audit: all public routes and the 404 had the expected title, H1,
-  description, canonical, social image, favicon, no mobile overflow, and no
-  sub-44px visible controls. Settled pages had no axe violations, but immediate
-  home entrance had F-5-2. All crawled links returned 200; the unknown route
-  returned 404. No normal-route console error occurred.
-- Privacy/offline: demo requests were same-origin; cookies, local/session
-  storage, IndexedDB, and OPFS were empty; all four visited routes reloaded
-  offline. Cache Storage contained only `git-stage-lines-v2`.
-- CLI isolation: two runs produced distinct
-  `/tmp/git-stage-lines-demo-*` paths; caller `git status --porcelain=v1`
-  remained ` M caller.txt`.
-- Aggregate gate: `npm test` failed with 21 browser tests passed and 1 failed;
-  the targeted mobile history/focus test reproduced the same serious contrast
-  violation. `npm run build` passed and produced the release binary plus
-  `dist/site`.
-
-## Run and verify
+## Run and deploy
 
 ```sh
 npm ci
 npm test
 npm run build
 cargo run -- --demo
+/opt/fleet/lib/deploy-static.sh git-stage-lines dist/site
 ```
 
-The review artifacts should be committed together. Product repair and
-deployment are intentionally outside this reviewer work order.
+## Known gaps and next steps
+
+No product, claim, accessibility, routing, privacy, or deployment gaps remain.
+The CLI package is ready for factory-controlled registry publication; do not
+publish it from this repository worker.
