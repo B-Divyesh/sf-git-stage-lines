@@ -114,10 +114,14 @@ test("direct routes have unique metadata and unknown routes return the designed 
   expect(await missing.text()).toContain("Find a valid page");
 });
 
-test("every public page has no axe accessibility violations", async ({ page }) => {
-  for (const route of ["/", "/demo/", "/privacy/", "/terms/", "/404.html"]) {
-    await page.goto(route);
-    await expectNoAxeViolations(page);
+test("every public page has no axe accessibility violations in light or dark mode", async ({ page }) => {
+  for (const colorScheme of ["light", "dark"]) {
+    await page.emulateMedia({ colorScheme });
+    for (const route of ["/", "/demo/", "/privacy/", "/terms/", "/404.html"]) {
+      await page.goto(route);
+      await page.waitForTimeout(600);
+      await expectNoAxeViolations(page);
+    }
   }
 });
 
