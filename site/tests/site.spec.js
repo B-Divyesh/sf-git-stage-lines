@@ -25,12 +25,14 @@ test("landing page is semantic and accessible", async ({ page }) => {
   await expectNoAxeViolations(page);
 });
 
-test("@claim:demo-entry opens the isolated sample and resets it", async ({ page }) => {
+test("@claim:demo-entry opens a resettable recorded sample and resets it", async ({ page }) => {
   await page.goto("/");
+  await expect(page.getByText("Shows a recorded sample run. Your files stay unchanged.")).toBeVisible();
   await page.getByRole("link", { name: "Try it with sample data" }).first().click();
   await expect(page).toHaveURL(/\/demo\/$/);
   await expect(page).toHaveTitle("Demo — git-stage-lines");
   await expect(page.getByText("Demo — sample data, nothing is saved")).toBeVisible();
+  await expect(page.getByText("This recording uses the sample shipped with the CLI.")).toBeVisible();
   await expect(page.locator("h1")).toBeFocused();
   await page.getByRole("button", { name: "Reset demo" }).click();
   await expect(page.locator("#demo-output")).toBeFocused();

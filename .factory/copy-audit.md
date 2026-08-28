@@ -12,7 +12,7 @@ sentence exceeds 22 words or uses a banned marketing word.
 | Stage exact Git lines from a script | 7 | Pass |
 | For developers and coding agents that need selected changes without git add -p. | 13 | Pass |
 | Try it with sample data | 5 | Pass |
-| Runs a sample repository in a temporary directory. Your files stay unchanged. | 12 | Pass |
+| Shows a recorded sample run. Your files stay unchanged. | 9 | Pass |
 | Stages selected changed lines | 4 | Pass |
 | No prompts or network calls | 5 | Pass |
 | Free under the MIT License | 5 | Pass |
@@ -66,13 +66,13 @@ sentence exceeds 22 words or uses a banned marketing word.
 | Demo — sample data, nothing is saved | 7 | Pass |
 | Reset demo | 2 | Pass |
 | View installation steps | 3 | Pass |
-| Isolated sample repository | 3 | Pass |
+| Recorded sample run | 3 | Pass |
 | See exact Git lines staged | 5 | Pass |
 | This recording uses the sample shipped with the CLI. Run git-stage-lines --demo to create your own temporary copy. | 18 | Pass |
 | What changed | 2 | Pass |
 | Lines 5 and 10 moved into the index. The follow-up comment stayed in the working file. | 16 | Pass |
 | Why it is isolated | 4 | Pass |
-| Each run creates a new temporary repository. The demo never reads your repositories or uses local or session storage. | 19 | Pass |
+| The CLI demo creates a new temporary repository. This browser recording reads no repositories and uses no local or session storage. | 21 | Pass |
 | You’re offline. This sample remains available. | 6 | Pass |
 
 ## Privacy, terms, and 404

@@ -30,4 +30,5 @@ the caller’s repository. Run `--demo` again to reset into another new director
 The browser demo is a self-hosted recording of the same bundled operation. It
 has no mutable data namespace because it stores nothing in local storage,
 session storage, cookies, IndexedDB, or OPFS. **Reset demo** restores the
-recording in memory. **Start for real** leaves demo mode and opens installation.
+recording in memory. **View installation steps** leaves demo mode and opens
+installation.
