@@ -63,3 +63,27 @@ cargo run -- --demo
 No product, claim, accessibility, routing, privacy, or deployment gaps remain.
 The CLI package is ready for factory-controlled registry publication; do not
 publish it from this repository worker.
+
+## Review 6 handoff
+
+Independent review completed; `.factory/review-6.md` is committed with a PASS
+verdict. No product code, dependencies, deployment configuration, or live
+service changed in this work order.
+
+- Fresh clone: `/tmp/gsl-review6-tlC8I0/repo`; setup was `npm ci` only.
+- Every one of the 19 exact `.factory/claims.json` commands passed separately
+  under `set -e`.
+- `npm test` passed in that clone. It covered Rust units/integrations/doctest,
+  Node/Python wrappers, claims, production site build, and 22 Playwright tests;
+  `test-results/.last-run.json` recorded `passed` with no failed tests.
+- Cold live Chromium checks at 390×844 and 1440×1000 confirmed first-read
+  clarity, demo/reset/focus, same-origin requests, empty user storage, offline
+  public routes, no console errors, zero axe violations, 44px mobile controls,
+  route focus, metadata, link crawl, and designed HTTP 404.
+- The real CLI `--demo` ran from an unrelated changed caller repository,
+  created a separate temporary sample repository, and left caller state intact.
+
+Run locally with `npm ci`, `npm test`, `npm run build`, and
+`cargo run -- --demo`. No known product, claims, privacy, accessibility,
+routing, copy, or deployment gaps remain. Preserve the recorded-browser-demo
+and isolated-CLI-demo distinction in future changes.
