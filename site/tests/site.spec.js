@@ -104,11 +104,12 @@ test("keyboard path, legal routes, metadata, and history focus work", async ({ p
 });
 
 test("direct routes have unique metadata and unknown routes return the designed 404", async ({ page, request }) => {
-  for (const [path, title, canonical] of [["/demo/", "Demo — git-stage-lines", "/demo/"], ["/privacy/", "Privacy — git-stage-lines", "/privacy/"], ["/terms/", "Terms — git-stage-lines", "/terms/"]]) {
+  for (const [path, title, canonical, description] of [["/demo/", "Demo — git-stage-lines", "/demo/", "Watch a recorded git-stage-lines sample using bundled data."], ["/privacy/", "Privacy — git-stage-lines", "/privacy/", "How git-stage-lines handles repository and website data."], ["/terms/", "Terms — git-stage-lines", "/terms/", "Terms for using git-stage-lines and its documentation site."]]) {
     await page.goto(path);
     await expect(page).toHaveTitle(title);
     await expect(page.locator("h1")).toHaveCount(1);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", `https://git-stage-lines.sociobot.in${canonical}`);
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", description);
     await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", /og-image\.jpg$/);
   }
   const missing = await request.get("/not-a-real-route");
