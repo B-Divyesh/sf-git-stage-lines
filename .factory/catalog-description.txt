@@ -1,1 +1,1 @@
-Stage selected Git lines from scripts and coding agents without an interactive prompt.
+Stage selected Git lines from scripts and coding agents without prompts.

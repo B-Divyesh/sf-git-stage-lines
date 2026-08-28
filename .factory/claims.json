@@ -63,6 +63,13 @@
     "sandbox": "fresh sample repository with target/debug on PATH; invoke through git stage-lines"
   },
   {
+    "id": "install-from-git",
+    "claim": "The documented Cargo command installs git-stage-lines from this repository",
+    "where": "landing install section, README",
+    "test": "npm run test:claims -- --grep @claim:install-from-git",
+    "sandbox": "fresh temporary Cargo root; run the documented Git-source install command and assert git-stage-lines --version"
+  },
+  {
     "id": "cli-no-network",
     "claim": "The CLI makes no network calls",
     "where": "landing privacy section and facts, privacy page, README",

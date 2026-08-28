@@ -74,6 +74,14 @@ test("range builder reports errors and updates a valid command", async ({ page }
   await expect(page.locator("#code-lines .selected")).toHaveCount(2);
 });
 
+test("installation copy uses the verified Git-source command", async ({ page }) => {
+  await page.goto("/#install");
+  await expect(page.getByRole("heading", { name: "Install from this repository" })).toBeVisible();
+  await expect(page.locator("#install .command code")).toHaveText("cargo install --git https://github.com/B-Divyesh/sf-git-stage-lines");
+  await expect(page.getByText("Install from Cargo", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("cargo install git-stage-lines", { exact: true })).toHaveCount(0);
+});
+
 test("keyboard path, legal routes, metadata, and history focus work", async ({ page }) => {
   await page.goto("/");
   await page.keyboard.press("Tab");

@@ -26,10 +26,10 @@ recording. The page uses no cookies, local storage, or session storage.
 
 ## Install
 
-Install from source with Cargo:
+Install directly from this repository with Cargo:
 
 ```sh
-cargo install --path .
+cargo install --git https://github.com/B-Divyesh/sf-git-stage-lines
 git stage-lines --version
 ```
 

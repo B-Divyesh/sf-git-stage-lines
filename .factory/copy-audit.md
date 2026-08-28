@@ -26,9 +26,9 @@ sentence exceeds 22 words or uses a banned marketing word.
 | Copy staging command | 3 | Pass |
 | How it works | 3 | Pass |
 | Change only the index | 4 | Pass |
-| The command uses Git’s clean filters and patch engine. It does not rewrite the working file. | 16 | Pass |
+| Git prepares the file using its own rules, then applies the selected lines to the index. It does not rewrite the working file. | 21 | Pass |
 | Read the change | 3 | Pass |
-| Compare the index with Git’s cleaned working file. | 8 | Pass |
+| Compare Git’s saved version with your edited file. | 8 | Pass |
 | Select file lines | 3 | Pass |
 | Keep the requested additions, deletions, and paired replacements. | 8 | Pass |
 | Check and apply | 3 | Pass |
@@ -46,10 +46,8 @@ sentence exceeds 22 words or uses a banned marketing word.
 | No account. The site makes same-origin requests and uses no cookies, local storage, or session storage. | 16 | Pass |
 | Install one Git subcommand | 4 | Pass |
 | Git exposes the git-stage-lines executable as git stage-lines. | 8 | Pass |
-| Install from Cargo | 3 | Pass |
-| Copy Cargo command | 3 | Pass |
-| Install from source | 3 | Pass |
-| Copy source command | 3 | Pass |
+| Install from this repository | 4 | Pass |
+| Copy install command | 3 | Pass |
 | For coding agents | 3 | Pass |
 | Read a JSON result | 4 | Pass |
 | Pass --json to receive one object on standard output. | 9 | Pass |
@@ -64,7 +62,7 @@ sentence exceeds 22 words or uses a banned marketing word.
 | --- | ---: | --- |
 | Demo — sample data, nothing is saved | 7 | Pass |
 | Reset demo | 2 | Pass |
-| Start for real | 3 | Pass |
+| View installation steps | 3 | Pass |
 | Isolated sample repository | 3 | Pass |
 | See exact Git lines staged | 5 | Pass |
 | This recording uses the sample shipped with the CLI. Run git-stage-lines --demo to create your own temporary copy. | 18 | Pass |

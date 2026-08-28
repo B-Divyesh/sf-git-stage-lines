@@ -123,6 +123,20 @@ test("@claim:git-subcommand runs through Git command discovery", () => {
   assert.match(git(repo, "diff", "--cached"), /GSL-24/);
 });
 
+test("@claim:install-from-git installs the documented Git-source command", () => {
+  const root = mkdtempSync(join(tmpdir(), "gsl-install-"));
+  const result = spawnSync(
+    "cargo",
+    ["install", "--git", "https://github.com/B-Divyesh/sf-git-stage-lines", "--root", root],
+    { encoding: "utf8", timeout: 180_000 },
+  );
+  assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`);
+  const installed = process.platform === "win32" ? join(root, "bin", "git-stage-lines.exe") : join(root, "bin", "git-stage-lines");
+  const version = spawnSync(installed, ["--version"], { encoding: "utf8" });
+  assert.equal(version.status, 0, version.stderr);
+  assert.match(version.stdout, /^git-stage-lines 0\.1\.0\s*$/);
+});
+
 test("@claim:cli-no-network runs the demo without opening a network socket", () => {
   const dir = mkdtempSync(join(tmpdir(), "gsl-socket-audit-"));
   const source = join(dir, "block.c");
