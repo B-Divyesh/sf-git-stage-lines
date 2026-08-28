@@ -36,7 +36,7 @@ Repair commit: `ff18b2717312ac7255d78ee34320f8c808107499`.
 - Cold live audit evidence is in `/tmp/gsl-polish5-live-j7oSUZ/`:
   [live audit](/tmp/gsl-polish5-live-j7oSUZ/live-audit.json),
   [desktop home](/tmp/gsl-polish5-live-j7oSUZ/live-home-desktop.png), and
-  [mobile demo](/tmp/gsl-polish5-live-j7oSUZ/live-demo-mobile.png). It
+  [mobile demo](/tmp/gsl-polish5-live-j7oSUZ/live-demo-mobile-cold.png). It
   confirmed immediate hero opacity `1`, the truthful reset status, same-origin
   requests, empty user storage, direct `?demo=1`, all route metadata, 404,
   zero axe violations in both themes, 44px mobile targets, no overflow, and

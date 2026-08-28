@@ -6,7 +6,7 @@ Deployment: Azure Static Web Apps `e05b9d4a-e7f1-41ff-8876-655fe398b60d`.
 All evidence below was rechecked on the deployed cold site at
 <https://git-stage-lines.sociobot.in/>. Shared live evidence:
 `/tmp/gsl-polish5-live-j7oSUZ/live-audit.json`,
-`live-home-desktop.png`, and `live-demo-mobile.png` in that directory.
+`live-home-desktop.png`, and `live-demo-mobile-cold.png` in that directory.
 
 | Finding ID | Change made or retained | Evidence |
 | --- | --- | --- |
