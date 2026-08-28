@@ -37,6 +37,7 @@ test("@claim:demo-entry opens a resettable recorded sample and resets it", async
   await page.getByRole("button", { name: "Reset demo" }).click();
   await expect(page.locator("#demo-output")).toBeFocused();
   await expect(page.locator("#demo-output")).toContainText("staged 2 selected lines in 1 file");
+  await expect(page.locator("#action-status")).toHaveText("Demo recording reset.");
 });
 
 test("@claim:site-private demo flow stays same-origin and avoids user storage", async ({ page }) => {
@@ -100,6 +101,7 @@ test("keyboard path, legal routes, metadata, and history focus work", async ({ p
   await page.goBack();
   await expect(page.locator("h1")).toHaveText("Stage exact Git lines from a script");
   await expect(page.locator("h1")).toBeFocused();
+  await expect(page.locator(".hero-copy")).toHaveCSS("opacity", "1");
   await expectNoAxeViolations(page);
 });
 

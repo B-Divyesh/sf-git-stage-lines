@@ -88,7 +88,7 @@
     "claim": "The first-screen sample action opens a resettable recorded demo with nothing saved",
     "where": "landing first screen and demo banner",
     "test": "npx playwright test --grep @claim:demo-entry --project=desktop",
-    "sandbox": "fresh browser context; enter from first screen, assert the recording route/banner/output, then reset"
+    "sandbox": "fresh browser context; enter from first screen, assert the recording route/banner/output, then reset and assert the exact recording-only status"
   },
   {
     "id": "site-private",

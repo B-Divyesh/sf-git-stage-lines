@@ -55,8 +55,7 @@ h1 em { font-family: Georgia, "Times New Roman", serif; font-weight: 400; color:
 .hero-art figcaption { position: absolute; left: -26px; right: -12px; bottom: 30px; display: flex; justify-content: space-between; padding: 0 6px; color: var(--ink); font: 700 10px/1 var(--mono); text-transform: uppercase; letter-spacing: .08em; }
 .hero-art figcaption span { padding: 8px 10px; background: rgb(251 252 248 / .88); border: 1px solid rgb(199 209 204 / .8); backdrop-filter: blur(8px); }
 .hero-art .selected-label { color: var(--deep-blue); transform: translateY(-47px); }
-.reveal { animation: reveal 480ms both; }
-.hero-art.reveal { animation-delay: 90ms; }
+.hero-art.reveal { animation: reveal 240ms both; animation-delay: 90ms; }
 .assurance { border-block: 1px solid var(--line); display: flex; justify-content: center; gap: clamp(24px, 7vw, 92px); padding: 18px 24px; color: var(--slate); font: 700 11px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .08em; }
 .assurance span::before { content: "◇"; margin-right: 9px; color: var(--blue); }
 .section { max-width: 1184px; margin: 0 auto; padding: 128px 28px; }
@@ -219,5 +218,5 @@ footer > div { display: flex; gap: 20px; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-  .reveal { animation: none; }
+  .hero-art.reveal { animation: none; }
 }

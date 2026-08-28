@@ -74,6 +74,7 @@ sentence exceeds 22 words or uses a banned marketing word.
 | Why it is isolated | 4 | Pass |
 | The CLI demo creates a new temporary repository. This browser recording reads no repositories and uses no local or session storage. | 21 | Pass |
 | You’re offline. This sample remains available. | 6 | Pass |
+| Demo recording reset. | 3 | Pass — dynamic reset status |
 
 ## Privacy, terms, and 404
 

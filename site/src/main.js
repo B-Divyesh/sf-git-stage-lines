@@ -7,8 +7,10 @@ if (document.body.dataset.page === "home" && query.get("demo") === "1") {
 
 const copyButtons = document.querySelectorAll("[data-copy], [data-copy-target]");
 const liveMessage = document.createElement("div");
+liveMessage.id = "action-status";
 liveMessage.className = "sr-only";
 liveMessage.setAttribute("aria-live", "polite");
+liveMessage.setAttribute("aria-atomic", "true");
 document.body.append(liveMessage);
 
 for (const button of copyButtons) {
@@ -78,7 +80,7 @@ if (resetDemo && demoOutput) {
   resetDemo.addEventListener("click", () => {
     demoOutput.innerHTML = original;
     demoOutput.focus();
-    liveMessage.textContent = "Demo reset with a fresh sample repository.";
+    liveMessage.textContent = "Demo recording reset.";
   });
 }
 
