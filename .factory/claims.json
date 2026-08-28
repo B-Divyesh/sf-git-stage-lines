@@ -36,7 +36,7 @@
   },
   {
     "id": "json-output",
-    "claim": "JSON mode writes one result object to standard output",
+    "claim": "JSON mode prints one result object",
     "where": "landing coding-agent section, README",
     "test": "npm run test:claims -- --grep @claim:json-output",
     "sandbox": "fresh sample repository; parse stdout and assert the documented keys and empty stderr"
@@ -46,11 +46,11 @@
     "claim": "Positive lines select additions and minus-prefixed original lines select deletions or paired replacements",
     "where": "landing command builder and reference, README",
     "test": "npm run test:claims -- --grep @claim:line-number-semantics",
-    "sandbox": "fresh sample repository with an addition, deletion, and replacement; assert final index content"
+    "sandbox": "fresh sample repository with an addition, deletion, replacement, and staged deletion; assert normal-stage content and that unstage restores only the selected deleted line"
   },
   {
     "id": "text-safety",
-    "claim": "Uses Git text filters and rejects binary files or conflicts without changing the index",
+    "claim": "Uses Git file-conversion rules and rejects binary files or conflicts without changing the index",
     "where": "landing how-it-works and scope, README",
     "test": "npm run test:claims -- --grep @claim:text-safety",
     "sandbox": "fresh repositories with CRLF attributes, a spaced path, binary data, and a merge conflict; assert normalized text and unchanged indexes"

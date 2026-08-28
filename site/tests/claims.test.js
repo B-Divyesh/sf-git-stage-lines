@@ -81,13 +81,21 @@ test("@claim:json-output returns one machine-readable result", () => {
   assert.equal(result.stderr, "");
 });
 
-test("@claim:line-number-semantics supports additions, deletions, and paired replacements", () => {
+test("@claim:line-number-semantics supports additions, deletions, paired replacements, and unstage deletions", () => {
   const repo = fixture();
   writeFileSync(join(repo, "sides.txt"), "one\ntwo\nthree\n");
   git(repo, "add", "sides.txt"); git(repo, "commit", "-qm", "sides");
   writeFileSync(join(repo, "sides.txt"), "one\nTWO\nfour\n");
   assert.equal(cli(repo, "sides.txt:-2,3").status, 0);
   assert.equal(git(repo, "show", ":sides.txt"), "one\nTWO\nfour\n");
+
+  writeFileSync(join(repo, "unstage-delete.txt"), "one\ntwo\nthree\nfour\n");
+  git(repo, "add", "unstage-delete.txt"); git(repo, "commit", "-qm", "unstage deletion");
+  writeFileSync(join(repo, "unstage-delete.txt"), "one\nfour\n");
+  assert.equal(cli(repo, "unstage-delete.txt:-2,-3").status, 0);
+  assert.equal(git(repo, "show", ":unstage-delete.txt"), "one\nfour\n");
+  assert.equal(cli(repo, "--unstage", "unstage-delete.txt:-2").status, 0);
+  assert.equal(git(repo, "show", ":unstage-delete.txt"), "one\ntwo\nfour\n");
 });
 
 test("@claim:text-safety honors Git text filters and rejects binary data", () => {
@@ -97,6 +105,7 @@ test("@claim:text-safety honors Git text filters and rejects binary data", () =>
   git(repo, "add", ".gitattributes", "space name.txt"); git(repo, "commit", "-qm", "text fixture");
   writeFileSync(join(repo, "space name.txt"), "one\r\nselected\r\ntwo\r\n");
   assert.equal(cli(repo, "space name.txt:2").status, 0);
+  assert.equal(git(repo, "show", ":space name.txt"), "one\nselected\ntwo\n");
   writeFileSync(join(repo, "binary.dat"), Buffer.from("one\0two\n"));
   const before = git(repo, "write-tree");
   const rejected = cli(repo, "binary.dat:1");

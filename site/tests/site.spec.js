@@ -10,6 +10,11 @@ test.beforeEach(async ({ page }) => {
 
 test.afterEach(async ({ page }) => { expect(page.errors).toEqual([]); });
 
+async function expectNoAxeViolations(page) {
+  const results = await new AxeBuilder({ page }).analyze();
+  expect(results.violations).toEqual([]);
+}
+
 test("landing page is semantic and accessible", async ({ page }) => {
   await page.goto("/");
   await expect(page).toHaveTitle("git-stage-lines — stage exact Git lines");
@@ -17,8 +22,7 @@ test("landing page is semantic and accessible", async ({ page }) => {
   await expect(page.locator("h1")).toHaveCount(1);
   await expect(page.locator("main")).toHaveCount(1);
   await expect(page.locator("img[alt]")).toHaveCount(1);
-  const results = await new AxeBuilder({ page }).analyze();
-  expect(results.violations.filter((item) => ["serious", "critical"].includes(item.impact))).toEqual([]);
+  await expectNoAxeViolations(page);
 });
 
 test("@claim:demo-entry opens the isolated sample and resets it", async ({ page }) => {
@@ -94,8 +98,7 @@ test("keyboard path, legal routes, metadata, and history focus work", async ({ p
   await page.goBack();
   await expect(page.locator("h1")).toHaveText("Stage exact Git lines from a script");
   await expect(page.locator("h1")).toBeFocused();
-  const results = await new AxeBuilder({ page }).analyze();
-  expect(results.violations.filter((item) => ["serious", "critical"].includes(item.impact))).toEqual([]);
+  await expectNoAxeViolations(page);
 });
 
 test("direct routes have unique metadata and unknown routes return the designed 404", async ({ page, request }) => {
@@ -111,11 +114,10 @@ test("direct routes have unique metadata and unknown routes return the designed 
   expect(await missing.text()).toContain("Find a valid page");
 });
 
-test("legal and demo pages have no serious accessibility issues", async ({ page }) => {
-  for (const route of ["/demo/", "/privacy/", "/terms/", "/404.html"]) {
+test("every public page has no axe accessibility violations", async ({ page }) => {
+  for (const route of ["/", "/demo/", "/privacy/", "/terms/", "/404.html"]) {
     await page.goto(route);
-    const results = await new AxeBuilder({ page }).analyze();
-    expect(results.violations.filter((item) => ["serious", "critical"].includes(item.impact))).toEqual([]);
+    await expectNoAxeViolations(page);
   }
 });
 
@@ -129,4 +131,22 @@ test("content fits a 390px viewport", async ({ page }) => {
   }
   await page.goto("/");
   await expect(page.getByRole("link", { name: "Try it with sample data" }).first()).toBeVisible();
+});
+
+test("every visible mobile control has a 44px touch target", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const route of ["/", "/demo/", "/privacy/", "/terms/", "/404.html"]) {
+    await page.goto(route);
+    const tooSmall = await page.locator("a:visible, button:visible, input:visible").evaluateAll((elements) => elements
+      .map((element) => {
+        const box = element.getBoundingClientRect();
+        return {
+          label: element.getAttribute("aria-label") || element.textContent?.trim() || element.getAttribute("name") || element.tagName,
+          width: box.width,
+          height: box.height,
+        };
+      })
+      .filter(({ width, height }) => width < 44 || height < 44));
+    expect(tooSmall, `${route} has a control below 44 × 44px`).toEqual([]);
+  }
 });

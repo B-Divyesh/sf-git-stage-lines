@@ -19,16 +19,18 @@ sentence exceeds 22 words or uses a banned marketing word.
 | Sample command builder | 3 | Pass |
 | Build a staging command | 4 | Pass |
 | Use file line numbers for additions. Use - plus the original line number for deletions. | 15 | Pass |
-| Repository path | 2 | Pass |
+| File path in the repository | 5 | Pass |
 | Changed lines to stage | 4 | Pass |
 | Try 3-4,7 or a deletion such as -2. | 8 | Pass |
 | Your command | 2 | Pass |
 | Copy staging command | 3 | Pass |
+| working file / selected range / index | 2 / 2 / 1 | Pass |
+| working file / selected lines | 2 / 2 | Pass |
 | How it works | 3 | Pass |
 | Change only the index | 4 | Pass |
 | Git prepares the file using its own rules, then applies the selected lines to the index. It does not rewrite the working file. | 21 | Pass |
 | Read the change | 3 | Pass |
-| Compare Git’s saved version with your edited file. | 8 | Pass |
+| Compare Git’s saved version with your working file. | 8 | Pass |
 | Select file lines | 3 | Pass |
 | Keep the requested additions, deletions, and paired replacements. | 8 | Pass |
 | Check and apply | 3 | Pass |
@@ -37,20 +39,21 @@ sentence exceeds 22 words or uses a banned marketing word.
 | Choose either side of a change | 6 | Pass |
 | A bad line, binary file, or conflict stops the full command before the index changes. | 15 | Pass |
 | Line numbers in stage and unstage modes | 7 | Pass |
+| Working file lines / Current index lines / Deleted lines from the last commit (HEAD) | 3 / 3 / 7 | Pass |
 | Either line selects the paired replacement | 6 | Pass |
 | Scope and privacy | 3 | Pass |
 | Keep the operation local | 4 | Pass |
 | The CLI runs Git locally. It has no network calls. | 10 | Pass |
 | Text files only. Binary data is rejected without changing the index. | 11 | Pass |
 | No history changes. The command does not commit, rebase, or split commits. | 12 | Pass |
-| No account. The site makes same-origin requests and uses no cookies, local storage, or session storage. | 16 | Pass |
+| Private site. The site makes same-origin requests and uses no cookies, local storage, or session storage. | 16 | Pass |
 | Install one Git subcommand | 4 | Pass |
 | Git exposes the git-stage-lines executable as git stage-lines. | 8 | Pass |
 | Install from this repository | 4 | Pass |
 | Copy install command | 3 | Pass |
 | For coding agents | 3 | Pass |
 | Read a JSON result | 4 | Pass |
-| Pass --json to receive one object on standard output. | 9 | Pass |
+| Pass --json to print one JSON result. | 7 | Pass |
 | Run the sample first | 4 | Pass |
 | See the staged lines | 4 | Pass |
 | Stage selected Git lines from scripts. Built by Param Factory · v0.1.0 | 12 | Pass |
@@ -87,7 +90,7 @@ sentence exceeds 22 words or uses a banned marketing word.
 | git-stage-lines is offered under the MIT License. | 7 | Pass |
 | You may use, copy, modify, merge, publish, distribute, sublicense, and sell copies under the repository license. | 16 | Pass |
 | The software is provided “as is”, without warranty. Review a dry-run patch when your index contents matter. | 17 | Pass |
-| The documentation and downloads may change or become unavailable. There are no paid features, accounts, or service commitments. | 18 | Pass |
+| The documentation and downloads may change or become unavailable. | 9 | Pass |
 | Find a valid page | 4 | Pass |
 | That address does not match a page in this site. | 10 | Pass |
 | Return to the product | 4 | Pass |

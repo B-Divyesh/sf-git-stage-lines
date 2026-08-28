@@ -11,7 +11,9 @@ export default defineConfig({
     trace: "retain-on-failure",
   },
   webServer: {
-    command: "npm run preview",
+    // Claim commands invoke Playwright directly from a clean clone. Build here
+    // so the server always has the routed documents it serves.
+    command: "npm run build:site && npm run preview",
     url: "http://127.0.0.1:4173",
     reuseExistingServer: true,
     timeout: 30_000,

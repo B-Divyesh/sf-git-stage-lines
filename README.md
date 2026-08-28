@@ -44,7 +44,7 @@ Options:
       --demo        Run bundled sample data in a new temporary repository
       --unstage     Remove selected lines from the index
       --dry-run     Print the patch without changing the index
-      --json        Write one JSON result object to stdout
+      --json        Print one JSON result object
   -C, --repo <DIR>  Run in this repository
 ```
 
@@ -60,8 +60,9 @@ git stage-lines --json src/app.ts:12
 ```
 
 Selecting either side of a replacement selects the paired replacement. An
-invalid line rejects the command before the index changes. Git clean filters
-determine text contents. Binary data is rejected without changing the index.
+invalid line rejects the command before the index changes. Git’s
+file-conversion rules determine the text compared. Binary data is rejected
+without changing the index.
 
 Success exits `0`. Bad arguments or unmatched lines exit `2`. Other file or
 Git failures exit `1`.
@@ -102,8 +103,9 @@ commands and [`.factory/demo.md`](.factory/demo.md) for isolation details.
 
 ## Scope
 
-Version 0.1.0 supports regular text files in the worktree, index, and `HEAD`
-flow. It does not rewrite history, create commits, or stage binary data.
+Version 0.1.0 supports ordinary text-file changes between the last commit,
+index, and working file. It does not rewrite history, create commits, or
+stage binary data.
 
 ## License
 

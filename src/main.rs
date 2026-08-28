@@ -7,7 +7,7 @@ use std::path::PathBuf;
     name = "git-stage-lines",
     version,
     about = "Stage exact changed lines without an interactive prompt",
-    long_about = "Stage exact changed lines without an interactive prompt.\n\nPositive ranges address the new side (working tree; index with --unstage). A leading minus addresses an old-side deletion: path:-12--18. Every requested line must be changed.",
+    long_about = "Stage exact changed lines without an interactive prompt.\n\nPositive ranges address the new side (working file; index with --unstage). A leading minus addresses an old-side deletion: path:-12--18. Every requested line must be changed.",
     after_help = "Examples:\n  git stage-lines src/app.ts:12-18,40,-9\n  git stage-lines --dry-run 'src/my file.ts:12'\n  git stage-lines --unstage --json src/app.ts:40"
 )]
 struct Args {
@@ -15,7 +15,7 @@ struct Args {
     #[arg(long, conflicts_with_all = ["unstage", "dry_run", "json", "repo"])]
     demo: bool,
 
-    /// Remove only these lines from the index (compare HEAD to index)
+    /// Remove only these lines from the index (compare the last commit to the index)
     #[arg(long)]
     unstage: bool,
 
@@ -23,7 +23,7 @@ struct Args {
     #[arg(long)]
     dry_run: bool,
 
-    /// Emit a stable JSON result object
+    /// Print one JSON result object
     #[arg(long)]
     json: bool,
 

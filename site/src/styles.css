@@ -17,7 +17,7 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { margin: 0; background: var(--snow); color: var(--ink); font: 16px/1.55 var(--sans); }
-a { color: inherit; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+a { display: inline-flex; min-width: 44px; min-height: 44px; align-items: center; color: inherit; text-underline-offset: 4px; text-decoration-thickness: 1px; }
 button, input { font: inherit; }
 button { min-height: 44px; }
 button, a { -webkit-tap-highlight-color: transparent; }
@@ -26,7 +26,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .skip-link:focus { transform: none; }
 .site-header, footer { max-width: 1184px; margin: auto; padding: 24px 28px; display: flex; align-items: center; justify-content: space-between; }
 .site-header { min-height: 88px; }
-.wordmark { display: inline-flex; align-items: center; gap: 12px; font: 700 14px/1 var(--mono); text-decoration: none; letter-spacing: -0.02em; }
+.wordmark { gap: 12px; padding: 6px 0; font: 700 14px/1 var(--mono); text-decoration: none; letter-spacing: -0.02em; }
 .mark { display: grid; place-items: center; width: 48px; height: 32px; border: 1px solid var(--ink); border-radius: 50%; color: var(--deep-blue); font-size: 9px; letter-spacing: -1px; transform: rotate(-4deg); }
 nav { display: flex; align-items: center; gap: 28px; }
 nav a { min-height: 44px; display: inline-flex; align-items: center; font-size: 14px; text-decoration: none; }
