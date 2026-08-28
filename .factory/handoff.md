@@ -71,7 +71,20 @@ To run one registered claim, copy its `test` command from
 
 Static build command: `npm ci && npm run build:site`.
 Artifact directory: `dist/site`.
-Target: <https://git-stage-lines.sociobot.in>.
+Deployed 2026-08-28T09:59:16Z through the work-order static deployment to
+<https://git-stage-lines.sociobot.in>.
+
+- Live `/`, `/demo/`, `/privacy/`, and `/terms/`: HTTP 200 with distinct titles.
+- Live unknown path: HTTP 404 with the designed 404 page.
+- Live `/?demo=1`: redirected in Chromium to `/demo/` with the demo banner,
+  correct title/H1, zero 390px overflow, and zero console errors.
+- CSP, `frame-ancestors`, permissions policy, referrer policy, and `nosniff`
+  headers are active.
+- Live home and demo SHA-256 values exactly match `dist/site`: home
+  `794e81d1a348c7497c185c0cc5e06120483520e07b0ce37448a38dc90e12cedb`;
+  demo `377950033243e918406f3037788f6ff24dd8847a971ba6f2015bd727b46b1fe7`.
+- Live factory verifier: passed. Evidence is in
+  `/work/.evidence/live-verify/verify.json`.
 
 ## Known gaps and next steps
 
