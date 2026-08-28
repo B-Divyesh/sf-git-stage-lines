@@ -2,8 +2,8 @@
 
 ## Outcome
 
-All blocking findings in `.factory/review-1.md` are resolved at clean-clone
-commit `74cdedb01ce2aa11fca640183ccc15c8e7d68237`.
+All blocking findings in `.factory/review-1.md` are resolved. The final claim
+suite ran from clean-clone commit `a0d935cc94a4d62f2906101860702e19b75dc5c0`.
 
 - The first screen names the job and audience, then offers **Try it with sample
   data** beside a plain isolation note.
@@ -26,11 +26,14 @@ commit `74cdedb01ce2aa11fca640183ccc15c8e7d68237`.
 
 ## Exact verification evidence
 
-Clean clone: `/tmp/git-stage-lines-clean-lz2MzX` at
-`74cdedb01ce2aa11fca640183ccc15c8e7d68237`.
+Full-suite clean clone: `/tmp/git-stage-lines-clean-lz2MzX` at implementation
+commit `74cdedb01ce2aa11fca640183ccc15c8e7d68237`. Final claim-only clean clone:
+`/tmp/git-stage-lines-final-e0W0UP` at
+`a0d935cc94a4d62f2906101860702e19b75dc5c0`.
 
-- Every command in `.factory/claims.json`: **18/18 passed individually**.
-  Per-claim output is in `/work/.evidence/claim-<id>.log`.
+- Every command in `.factory/claims.json`: **18/18 passed individually** in
+  both clean clones. Final output is in
+  `/work/.evidence/final-claim-<id>.log`.
 - `npm test`: **passed** — 6 Rust unit tests, 7 real-Git integration tests,
   1 doctest, Node and Python wrapper tests, 15 CLI claim tests, and 18
   Playwright checks across desktop and mobile.
