@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite site",
-    "build:site": "vite build site --outDir ../dist/site",
+    "build:site": "vite build site --outDir ../dist/site && node site/generate-sw.mjs",
     "build:cli": "cargo build --release",
     "build": "npm run build:cli && npm run build:site",
-    "preview": "vite preview site --outDir ../dist/site --host 127.0.0.1 --port 4173",
-    "test": "cargo test && node --test wrappers/node/test.js && PYTHONPATH=wrappers/python python3 -m unittest discover -s wrappers/python/tests && npm run build:site && playwright test",
-    "test:site": "playwright test"
+    "preview": "node site/tests/server.mjs",
+    "test": "cargo test && node --test wrappers/node/test.js && PYTHONPATH=wrappers/python python3 -m unittest discover -s wrappers/python/tests && npm run test:claims && npm run build:site && playwright test",
+    "test:site": "playwright test",
+    "test:claims": "node site/tests/run-claims.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.10.2",
