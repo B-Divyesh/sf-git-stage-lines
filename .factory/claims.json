@@ -50,10 +50,10 @@
   },
   {
     "id": "text-safety",
-    "claim": "Uses Git text filters and rejects binary files without changing the index",
+    "claim": "Uses Git text filters and rejects binary files or conflicts without changing the index",
     "where": "landing how-it-works and scope, README",
     "test": "npm run test:claims -- --grep @claim:text-safety",
-    "sandbox": "fresh repository with CRLF attributes, a spaced path, and binary data; assert normalized index and atomic rejection"
+    "sandbox": "fresh repositories with CRLF attributes, a spaced path, binary data, and a merge conflict; assert normalized text and unchanged indexes"
   },
   {
     "id": "git-subcommand",
@@ -74,7 +74,7 @@
     "claim": "Each CLI demo uses a new temporary repository with bundled sample data",
     "where": "demo page, README, .factory/demo.md",
     "test": "npm run test:claims -- --grep @claim:demo-isolation",
-    "sandbox": "run --demo twice and assert distinct temporary paths, staged output, and remaining sample change"
+    "sandbox": "run --demo from a changed caller repository twice; assert distinct temporary paths, sample output, and untouched caller state"
   },
   {
     "id": "demo-entry",

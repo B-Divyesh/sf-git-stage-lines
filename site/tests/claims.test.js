@@ -103,6 +103,16 @@ test("@claim:text-safety honors Git text filters and rejects binary data", () =>
   assert.equal(rejected.status, 1);
   assert.match(rejected.stderr, /binary/);
   assert.equal(git(repo, "write-tree"), before);
+
+  const conflict = mkdtempSync(join(tmpdir(), "gsl-conflict-"));
+  git(conflict, "init", "-q"); git(conflict, "config", "user.name", "Claim test"); git(conflict, "config", "user.email", "claim@example.invalid");
+  writeFileSync(join(conflict, "conflict.txt"), "base\n"); git(conflict, "add", "conflict.txt"); git(conflict, "commit", "-qm", "base");
+  git(conflict, "checkout", "-qb", "side"); writeFileSync(join(conflict, "conflict.txt"), "side\n"); git(conflict, "commit", "-qam", "side");
+  git(conflict, "checkout", "-q", "master"); writeFileSync(join(conflict, "conflict.txt"), "main\n"); git(conflict, "commit", "-qam", "main");
+  spawnSync("git", ["-C", conflict, "merge", "side"], { encoding: "utf8" });
+  const conflictIndex = git(conflict, "ls-files", "--stage", "--", "conflict.txt");
+  assert.equal(cli(conflict, "conflict.txt:1").status, 1);
+  assert.equal(git(conflict, "ls-files", "--stage", "--", "conflict.txt"), conflictIndex);
 });
 
 test("@claim:git-subcommand runs through Git command discovery", () => {
@@ -126,13 +136,16 @@ test("@claim:cli-no-network runs the demo without opening a network socket", () 
 });
 
 test("@claim:demo-isolation creates a fresh temporary repository for each run", () => {
-  const first = spawnSync(binary, ["--demo"], { encoding: "utf8" });
+  const caller = fixture();
+  const callerBefore = git(caller, "status", "--porcelain=v1");
+  const first = spawnSync(binary, ["--demo"], { encoding: "utf8", cwd: caller });
   const second = spawnSync(binary, ["--demo"], { encoding: "utf8" });
   assert.equal(first.status, 0); assert.equal(second.status, 0);
   const path = (value) => value.match(/Sample repository: (.+)/)?.[1];
   assert.ok(path(first.stdout)?.startsWith(tmpdir()));
   assert.notEqual(path(first.stdout), path(second.stdout));
   assert.match(first.stdout, /Still unstaged:[\s\S]*Follow-up/);
+  assert.equal(git(caller, "status", "--porcelain=v1"), callerBefore);
 });
 
 test("@claim:mit-license verifies the package license and full license text", () => {
