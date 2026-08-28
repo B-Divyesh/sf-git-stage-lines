@@ -1,5 +1,15 @@
 # Handoff: git-stage-lines v0.1.0
 
+## Independent verification verdict — PASS
+
+Candidate `ceee7043ff4590f926cb4cd77f4741088ff07426` was independently verified
+on 2026-08-28 against <https://git-stage-lines.sociobot.in/>. `npm test`, the
+exact production build, packaging/consumer checks, real-Git end-to-end cases,
+browser/axe checks, and Lighthouse passed. Checked deployed HTML, assets,
+service worker, Privacy, and Terms match this candidate's `dist/site/`
+byte-for-byte. The authoritative evidence and low-severity follow-ups are in
+`.factory/verification.md`; builder notes below remain implementation context.
+
 Work order: `git-stage-lines-build-1`  
 Completed: 2026-08-27  
 Deploy directory: `dist/site/`
