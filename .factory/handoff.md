@@ -1,66 +1,60 @@
-# Polish round 4 handoff
+# Review 5 handoff
 
 ## Delivered
 
-- Repaired Review 4 F-4-1: the first action now accurately says **“Shows a
-  recorded sample run. Your files stay unchanged.”** The `/demo/` metadata,
-  page label, isolation explanation, `demo-entry` claim, and claim assertion
-  now consistently distinguish the browser recording from CLI `--demo`, which
-  creates the temporary repository.
-- Repaired Review 4 F-4-2: `.factory/demo.md` now calls the exit action
-  **“View installation steps”**, matching the real control.
-- Added route-description regression coverage and refreshed the claim/copy
-  audit/catalog records. The catalog line is verb-first and 66 characters:
-  “Stage selected Git lines from scripts without interactive prompts.”
-- Preserved the glacial-ceramic visual system and the CLI/static-site artifact
-  class. No analytics, CDN assets, account flow, or runtime AI feature was
-  introduced.
+- Completed a cold live review at 390×844 and 1440×1000 before scrolling.
+- Audited every landing and README sentence plus headings, labels, controls,
+  dynamic landing messages, terminology, and claim coverage.
+- Ran all 19 exact `.factory/claims.json` commands separately after only
+  `npm ci` in a fresh clone.
+- Exercised the live browser demo, reset, storage isolation, same-origin
+  network behavior, offline reloads, metadata, routing, Back/focus behavior,
+  links, mobile sizing, and axe checks.
+- Ran the real CLI demo twice from a changed temporary caller repository.
+- Rechecked every finding from Reviews 1–4 against both live output and code.
+- Wrote the evidence and verdict to `.factory/review-5.md`. No product code was
+  modified.
 
-## Source and deployment
+## Verdict and remaining work
 
-The deployed repair source is
-`a6e9c791a88930ed975d393fded7e2a0c2982919` (`92b9fb3` plus `a6e9c79`). It
-was pushed to `origin/main`, built with the work-order command
-`npm ci && npm run build:site`, and deployed with:
+**FAIL.** Two blocking findings remain. F-5-1 reopens Review 4 F-4-1. After
+**Reset demo**, the screen-reader live region says “Demo reset with a fresh
+sample repository,” although the browser only restores a static recording.
 
-```sh
-/opt/fleet/lib/deploy-static.sh git-stage-lines dist/site
-```
+Change that status to **“Demo recording reset.”**, assert the exact live-region
+message in `@claim:demo-entry`, and add it to `.factory/copy-audit.md`.
 
-The Azure Static Web App upload succeeded (deployment id
-`51827d55-8dfd-404b-a5df-fe196b979efc`) at
-<https://git-stage-lines.sociobot.in/>.
+F-5-2 records a reproducible `npm test` failure. The 480ms opacity entrance on
+`.hero-copy` temporarily lowers key first-screen text below 4.5:1 contrast;
+axe measured 3.65:1 in the failing mobile Back-navigation test and as low as
+3.1:1 on an immediate live audit. Keep readable text fully opaque and limit
+entrance motion to decorative content, then rerun the full gate.
 
-## Verification
+## Verification evidence
 
-- Fresh clone `/tmp/gsl-polish4-clean-tYQlRO`: after only `npm ci`, every one
-  of the 19 exact `.factory/claims.json` commands passed. Evidence:
-  `/tmp/gsl-polish4-clean-claims.log` (19 claim sections, 19 `EXIT 0` lines).
-- `npm test` passed: 6 Rust unit tests, 7 real-Git integration tests, 1
-  doctest, Node/Python wrapper tests, 16 CLI claim tests, and 22 browser tests.
-  Evidence: `/tmp/gsl-polish4-npm-test.log`.
-- `npm run build` (release CLI plus static site), `cargo fmt --check`,
-  `cargo clippy --all-targets -- -D warnings`,
-  `cargo package --allow-dirty`, `npm pack --dry-run ./wrappers/node`, and
-  `python -m build wrappers/python` all passed.
-- Live `verify-url.sh` passed for `/` and `/demo/` with no console errors,
-  `lang=en`, a title, one h1/main landmark, and no missing image alt text.
-  Evidence: `/tmp/gsl-polish4-live/home/verify.json` and
-  `/tmp/gsl-polish4-live/demo/verify.json`.
-- A fresh live Playwright + axe audit passed: truthful first-screen copy,
-  one-click and direct `?demo=1`, demo banner/reset focus, no cookies/local or
-  session storage/IndexedDB/OPFS, same-origin requests, route titles/H1s,
-  designed HTTP 404, zero axe violations in light and dark themes, no 390px
-  overflow, 44px visible controls, and offline reloads of `/`, `/demo/`,
-  `/privacy/`, and `/terms/`. Evidence:
-  `/tmp/gsl-polish4-live/live-audit.json`,
-  `/tmp/gsl-polish4-live/live-home-mobile.png`, and
-  `/tmp/gsl-polish4-live/live-demo-mobile.png`.
-- Live Lighthouse (mobile) scored Performance 100, Accessibility 100, Best
-  Practices 100, SEO 100; LCP 0.9 s and CLS 0. Evidence:
-  `/tmp/gsl-polish4-live/lighthouse-retry.json`.
+- Fresh clone: `/tmp/gsl-review5-clean-CG2qKa`; all 19 registered commands
+  exited 0.
+- Cold screenshots and extracted first-screen text:
+  `/tmp/gsl-review5-live-1KR0PC/first-mobile.png`,
+  `/tmp/gsl-review5-live-1KR0PC/first-desktop.png`, and
+  `/tmp/gsl-review5-live-1KR0PC/first-read.json`.
+- Live audit: all public routes and the 404 had the expected title, H1,
+  description, canonical, social image, favicon, no mobile overflow, and no
+  sub-44px visible controls. Settled pages had no axe violations, but immediate
+  home entrance had F-5-2. All crawled links returned 200; the unknown route
+  returned 404. No normal-route console error occurred.
+- Privacy/offline: demo requests were same-origin; cookies, local/session
+  storage, IndexedDB, and OPFS were empty; all four visited routes reloaded
+  offline. Cache Storage contained only `git-stage-lines-v2`.
+- CLI isolation: two runs produced distinct
+  `/tmp/git-stage-lines-demo-*` paths; caller `git status --porcelain=v1`
+  remained ` M caller.txt`.
+- Aggregate gate: `npm test` failed with 21 browser tests passed and 1 failed;
+  the targeted mobile history/focus test reproduced the same serious contrast
+  violation. `npm run build` passed and produced the release binary plus
+  `dist/site`.
 
-## Run and release
+## Run and verify
 
 ```sh
 npm ci
@@ -69,11 +63,5 @@ npm run build
 cargo run -- --demo
 ```
 
-To prepare the published packages without publishing them, use
-`cargo package`, `npm pack ./wrappers/node`, and `python -m build
-wrappers/python`. The factory owns registry credentials.
-
-## Remaining work
-
-None. All findings in Reviews 1–4 are mapped in `.factory/polish-4.md` and
-were rechecked on the deployed site.
+The review artifacts should be committed together. Product repair and
+deployment are intentionally outside this reviewer work order.
