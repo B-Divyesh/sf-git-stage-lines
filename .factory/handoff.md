@@ -1,95 +1,35 @@
-# Handoff — perfection loop round 1
+# Review 2 handoff
 
-## Outcome
+## What was done
 
-All blocking findings in `.factory/review-1.md` are resolved. The final claim
-suite ran from clean-clone commit `a0d935cc94a4d62f2906101860702e19b75dc5c0`.
+- Performed the requested adversarial first-read QA review without changing product code.
+- Added `.factory/review-2.md` with cold mobile/desktop, copy, demo, sandbox, claim, routing, accessibility, link, and identity evidence.
+- Found one blocking issue: the landing page advertises `cargo install git-stage-lines`, but the package is not published on crates.io. The source install works.
 
-- The first screen names the job and audience, then offers **Try it with sample
-  data** beside a plain isolation note.
-- `git-stage-lines --demo` creates a unique temporary repository from the
-  shipped `examples/` files, stages lines 5 and 10, leaves one change unstaged,
-  and prints the repository path.
-- `/?demo=1` enters the real `/demo/` route. Its persistent banner includes
-  **Reset demo** and **Start for real**.
-- `.factory/claims.json` registers 18 visitor-facing claims. Each ID appears in
-  exactly one `@claim:<id>` test.
-- `/demo/`, `/privacy/`, `/terms/`, and the 404 have distinct titles,
-  descriptions, canonicals, social metadata, shared navigation, and footers.
-- Route changes and browser history focus the destination H1 and announce it.
-- Unknown paths return the designed 404 with HTTP 404 under the production
-  configuration and the test server.
-- Mobile layouts stack the hero, demo controls, boundaries, terminal, and
-  footer without horizontal overflow at 390px.
-- The service worker precaches the complete built shell, including hashed JS
-  and CSS, and uses HTML fallback only for navigation requests.
+## How verified
 
-## Exact verification evidence
-
-Full-suite clean clone: `/tmp/git-stage-lines-clean-lz2MzX` at implementation
-commit `74cdedb01ce2aa11fca640183ccc15c8e7d68237`. Final claim-only clean clone:
-`/tmp/git-stage-lines-final-e0W0UP` at
-`a0d935cc94a4d62f2906101860702e19b75dc5c0`.
-
-- Every command in `.factory/claims.json`: **18/18 passed individually** in
-  both clean clones. Final output is in
-  `/work/.evidence/final-claim-<id>.log`.
-- `npm test`: **passed** — 6 Rust unit tests, 7 real-Git integration tests,
-  1 doctest, Node and Python wrapper tests, 15 CLI claim tests, and 18
-  Playwright checks across desktop and mobile.
-- Browser coverage: one-click demo/reset, direct routes, reload, Back/H1 focus,
-  HTTP 404, 390px overflow, console errors, same-origin privacy, empty cookie/
-  local/session/IndexedDB/OPFS state, service-worker offline reloads, and axe.
-- Axe serious/critical findings: **0** on home, demo, privacy, terms, and 404.
-- `npm run build`: **passed**; release binary and `dist/site/` produced.
-- Initial built JS: **3.61 KB (1.62 KB gzip)**. CSS: **14.96 KB (4.30 KB
-  gzip)**. No webfonts. Desktop hero: 40.8 KB; mobile hero: 12.7 KB.
-- Lighthouse 13 mobile: **Performance 100, Accessibility 100, Best Practices
-  100, SEO 100**. LCP 1.1 s, CLS 0, total blocking time 0 ms. JSON evidence:
-  `/work/.evidence/lighthouse.json`.
-- Factory URL verifier: **passed** with title, `lang=en`, one H1, main landmark,
-  image alt text, labeled buttons, and zero console errors. Evidence:
-  `/work/.evidence/local-verify/verify.json`.
-- `cargo fmt --check`: **passed**.
-- `cargo clippy --all-targets -- -D warnings`: **passed**.
-- `cargo package --allow-dirty`: **passed**, including archive compilation.
-- `npm pack --dry-run ./wrappers/node`: **passed**.
-- Python sdist and wheel build in a fresh virtual environment: **passed**.
-- Manual screenshots reviewed at 1440px and 390×844 for home and demo.
-
-## Run and verify
+From a fresh clone at `/tmp/git-stage-lines-review-2-1tO13L`:
 
 ```sh
 npm ci
-npm test
 npm run build
-npm run test:claims
-cargo run -- --demo
 ```
 
-To run one registered claim, copy its `test` command from
-`.factory/claims.json`.
+Every command listed in `.factory/claims.json` passed (18 claim IDs). Fresh browser checks covered 390px and desktop first screens, demo/reset, storage isolation, same-origin requests, offline reload, route history focus, 404, and axe serious/critical issues. The real CLI demo was run from a temporary caller directory.
 
-## Deployment
+The failed installation proof was:
 
-Static build command: `npm ci && npm run build:site`.
-Artifact directory: `dist/site`.
-Deployed 2026-08-28T09:59:16Z through the work-order static deployment to
-<https://git-stage-lines.sociobot.in>.
+```sh
+cargo install git-stage-lines --version 0.1.0 --root /tmp/<fresh-dir>
+# error: could not find git-stage-lines in registry crates-io with version =0.1.0
+```
 
-- Live `/`, `/demo/`, `/privacy/`, and `/terms/`: HTTP 200 with distinct titles.
-- Live unknown path: HTTP 404 with the designed 404 page.
-- Live `/?demo=1`: redirected in Chromium to `/demo/` with the demo banner,
-  correct title/H1, zero 390px overflow, and zero console errors.
-- CSP, `frame-ancestors`, permissions policy, referrer policy, and `nosniff`
-  headers are active.
-- Live home and demo SHA-256 values exactly match `dist/site`: home
-  `794e81d1a348c7497c185c0cc5e06120483520e07b0ce37448a38dc90e12cedb`;
-  demo `377950033243e918406f3037788f6ff24dd8847a971ba6f2015bd727b46b1fe7`.
-- Live factory verifier: passed. Evidence is in
-  `/work/.evidence/live-verify/verify.json`.
+The working alternative was verified:
 
-## Known gaps and next steps
+```sh
+cargo install --git https://github.com/B-Divyesh/sf-git-stage-lines --root /tmp/<fresh-dir>
+```
 
-No known blocking or high-severity findings remain. Registry publishing stays
-with the factory; no package was published from this worker.
+## Next step
+
+Remove the unavailable registry install command or publish the crate and add a clean-install registered claim test. Review 2 remains **FAIL** until then.
